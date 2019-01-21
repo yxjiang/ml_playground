@@ -1,19 +1,26 @@
 """
 Host Crowding
 
-You're given an array of CSV strings representing search results. Results are sorted by a score initially. A given host may have several listings that show up in these results. Suppose we want to show 12 results per page, but we don't want the same host to dominate the results. 
-Write a function that will reorder the list so that a host shows up at most once on a page if possible, but otherwise preserves the ordering. Your program should return the new array and print out the results in blocks representing the pages.
+You're given an array of CSV strings representing search results. 
+Results are sorted by a score initially. A given host may have several listings 
+that show up in these results. Suppose we want to show 12 results per page, 
+but we don't want the same host to dominate the results. 
+Write a function that will reorder the list so that a host shows up at most 
+once on a page if possible, but otherwise preserves the ordering. 
+Your program should return the new array and print out the results in blocks 
+representing the pages.
 
 Input:
 *  An array of csv strings, with sort score
 *  number of results per page
 
+Worst case O(n^2) if there is only 1 distinct host_id.
 """
 def displayPages(lines, page_size):
     """
-    Use a map to keep the extra listings for each of the hosts, where
-    key is the host_id and val is the queue of listings.
-    Then use a set to keep track of whether a listing of a host has been displayed.
+    1) Use a map to keep the extra listings for each of the hosts, where
+        key is the host_id and val is the queue of listings.
+    2) Use a set to keep track of whether a listing of a host has been displayed.
     """
     class Node:
         def __init__(self, line):
@@ -48,6 +55,7 @@ def displayPages(lines, page_size):
         if count == page_size:  # revist previous listings in new page
             res.append('===')  # page separator
             count = 0
+            reach_end = False
             visited.clear()
             prev = head
             cur = head.next
@@ -131,4 +139,6 @@ class Tester(unittest.TestCase):
         ]
         res = displayPages(listings, 12)
         self.assertEqual(res, expect)
+        for l in res:
+            print(l)
 unittest.main()
