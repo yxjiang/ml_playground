@@ -1,3 +1,9 @@
 nohup.out
 .ipynb_checkpoints/
 *.model
+tensorboard_logs
+*.pt
+.data
+.vscode
+*.swp
+data/*
