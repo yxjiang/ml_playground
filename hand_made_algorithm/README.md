@@ -1,7 +1,7 @@
 # Hand-made basic ML-algorithms implemented with numpy
 
 1. [Linear regression](https://github.com/yxjiang/ml_playground/blob/master/hand_made_algorithm/linear_regression.ipynb).
-2. Logistic regression.
+2. [Logistic regression](https://github.com/yxjiang/ml_playground/blob/master/hand_made_algorithm/logistic_regression.ipynb).
 3. Multi-layer perception.
 4. Convolution.
 5. Pooling.
