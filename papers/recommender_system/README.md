@@ -8,6 +8,7 @@ Recommender System Paper
 | ICDM2016  | Product-based NN | [Product-based neural networks for user response prediction](#icdm2016)  |
 | DLRS2016  | Wide & Deep  | [Wide & Deep Learning for Recommender Systems](#dlrs2016)
 | IJCAI2017 | DeepFM  | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](#ijcai2017) |
+| ADKDD2017 | Deep&Cross NN | [Deep & Cross Network for Ad Click Predictions](#adkdd2017) |
 
 
 ## <a id="adkdd2014">[Practical lessons from predicting clicks on ads at facebook](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.718.9050&rep=rep1&type=pdf)
@@ -57,10 +58,19 @@ The deep part is a DNN model that tries to learn a general representation of the
 ![](imgs/dlrs2016-1.png)
 
 
-## <a id="ijcai2017">[DeepFM: A Factorization-Machine based Neural Network for CTR Prediction]([#ijcai2017](https://www.ijcai.org/Proceedings/2017/0239.pdf)
+## <a id="ijcai2017">[DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](https://www.ijcai.org/Proceedings/2017/0239.pdf)
 
 This paper proposed a model called DeepFM that natively integrate FM with DNN that provides and e2e CTR prediction. DeepFM has the advantages of capturing both the low-level feature interactions (dot-product) like FM and capturing the high-level feature interactions like DNN, without manually crafted feature engineering like other model architectures.
 
 In summary, this paper combines the architecture of FNN and Wide&Deep by replacing the Wide part with PNN. Another change is that instead of directly feeding the raw features to the FM layer, it feeds the raw features to the embedding layer. Then the output of embedding layer would be shared by the FM and the DNN.
 
 ![](imgs/ijcai2017-1.png)
+
+
+## <a id="adkdd2017"> [Deep & Cross Network for Ad Click Predictions](https://arxiv.org/pdf/1708.05123.pdf)
+
+This paper proposed Deep & Cross Network that integrate the traditional DNN with a Cross-network. The network is able to learn the feature interactions at a certain bounded degree, to achieve efficiency advantages over the traditional DNN.
+
+From the architecture perspective, this paper is a variant of FM NN and the Wide & Deep NN. It replaced the Wide part with stacked crossed network that each layer is a cross product of the output of the previous layer and the embedding and stacking layer. This make the network to be able to learn the lth-degree cross product of the input features.
+
+![](imgs/adkdd2017-1.png)
