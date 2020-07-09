@@ -9,6 +9,7 @@ Recommender System Paper
 | DLRS2016  | Wide & Deep  | [Wide & Deep Learning for Recommender Systems](#dlrs2016)
 | IJCAI2017 | DeepFM  | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](#ijcai2017) |
 | ADKDD2017 | Deep&Cross NN | [Deep & Cross Network for Ad Click Predictions](#adkdd2017) |
+| IJCAI2017-2 | Attentional FM | [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Network](#ijcai2017-2) | 
 
 
 ## <a id="adkdd2014">[Practical lessons from predicting clicks on ads at facebook](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.718.9050&rep=rep1&type=pdf)
@@ -74,3 +75,13 @@ This paper proposed Deep & Cross Network that integrate the traditional DNN with
 From the architecture perspective, this paper is a variant of FM NN and the Wide & Deep NN. It replaced the Wide part with stacked crossed network that each layer is a cross product of the output of the previous layer and the embedding and stacking layer. This make the network to be able to learn the lth-degree cross product of the input features.
 
 ![](imgs/adkdd2017-1.png)
+
+
+## <a id="ijcai2017-2"> [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Networks](https://www.ijcai.org/Proceedings/2017/0435.pdf)
+
+This paper proposed the attentional FM to address the issue of negative impact of noisy feature interactions of the vanilla FM. Essentially, an attention network (MLP) is added and provides extra weights to quantify the importance of each of the pairwise feature interactions. 
+
+From the model training perspective, in addition to learn the weights of the FM, the weights of the attention network
+also needs to be learnt.
+
+![](imgs/ijcai2017-2.png)
