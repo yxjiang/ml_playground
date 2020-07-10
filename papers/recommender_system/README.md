@@ -18,13 +18,18 @@ Recommender System Paper
 * Use online data joiner to keep training data fresh.
 * The importance of features are quantified as the total squared error reduction in the boosting tree.
 
-![](imgs/adkdd2014-1.png)
+<p align="center">
+    <img align="center" src="imgs/adkdd2014-1.png">
+</p>
 
 
 ## <a id="cikm2015">[A Convolutional Click Prediction Model](http://ir.ia.ac.cn/bitstream/173211/12337/1/A%20Convolutional%20Click%20Prediction%20Model.pdf)
 Proposed the convolution click prediction model by leveraging the sequential behavioral information of the users. Each of the ad impression in the sequence is represented as an embedding $e_i$. Several convolution operations are applied to the input matrix $s$, then flexible pooling followed by another conv, pooling and finally a full connected layer.
 
-![](imgs/cikm2015-1.png)
+<p align="center">
+    <img align="center" src="imgs/cikm2015-1.png">
+</p>
+
 
 ## <a id="ecir2016">[Deep Learning over Multi-field Categorical Data: A Case Study on User Response Prediction](https://arxiv.org/pdf/1601.02376.pdf)
 
@@ -36,15 +41,20 @@ For SNN, the input layer and the first hidden layer are fully connected. Due to 
 
 In summary, the major contribution of this paper is the proposed representative learning for the multi-field categorical features, including FM-like NN and RBM-NN and DAE-NN. All the three methods are aiming to effectively learn a low dimensional representative of the hugh input feature space.
 
-![](imgs/ecir2016-1.png)
+<p align="center">
+    <img align="center" src="imgs/ecir2016-1.png">
+    <img align="center" src="imgs/ecir2016-2.png">
+</p>
 
-![](imgs/ecir2016-2.png)
 
 ## <a id="icdm2016">[Product-based neural networks for user response prediction](#icdm2016)
 
 This is one paper focused on the representation learning of the input features before feeding to the neural nets. An embedding layer is leveraged to learning the dense representation (embedding) of the interactive patterns between intern-field categorical features. This embedding layer is used as the first layer of an architecture called Product-based Neural Networks (PNN) for end-to-end recommendation.
 
-![](imgs/icdm2016-1.png)
+<p align="center">
+    <img align="center" src="imgs/icdm2016-1.png">
+</p>
+
 
 The model architecture proposed in this paper is an incremental updating from the architecture proposed in the [FNN](#ecir2016) paper. Instead of doing pre-training for the first hidden layer, PNN added the embedding layer to learn the low level representation of the input features.
 
@@ -56,7 +66,9 @@ The wide part is a linear model that learns the relationship between features us
 
 The deep part is a DNN model that tries to learn a general representation of the input features.
 
-![](imgs/dlrs2016-1.png)
+<p align="center">
+    <img align="center" src="imgs/dlrs2016-1.png">
+</p>
 
 
 ## <a id="ijcai2017">[DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](https://www.ijcai.org/Proceedings/2017/0239.pdf)
@@ -65,7 +77,9 @@ This paper proposed a model called DeepFM that natively integrate FM with DNN th
 
 In summary, this paper combines the architecture of FNN and Wide&Deep by replacing the Wide part with PNN. Another change is that instead of directly feeding the raw features to the FM layer, it feeds the raw features to the embedding layer. Then the output of embedding layer would be shared by the FM and the DNN.
 
-![](imgs/ijcai2017-1.png)
+<p align="center">
+    <img align="center" src="imgs/ijcai2017-1.png">
+</p>
 
 
 ## <a id="adkdd2017"> [Deep & Cross Network for Ad Click Predictions](https://arxiv.org/pdf/1708.05123.pdf)
@@ -74,7 +88,10 @@ This paper proposed Deep & Cross Network that integrate the traditional DNN with
 
 From the architecture perspective, this paper is a variant of FM NN and the Wide & Deep NN. It replaced the Wide part with stacked crossed network that each layer is a cross product of the output of the previous layer and the embedding and stacking layer. This make the network to be able to learn the lth-degree cross product of the input features.
 
-![](imgs/adkdd2017-1.png)
+<p align="center">
+    <img align="center" src="imgs/adkdd2017-1.png">
+</p>
+
 
 
 ## <a id="ijcai2017-2"> [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Networks](https://www.ijcai.org/Proceedings/2017/0435.pdf)
@@ -84,4 +101,7 @@ This paper proposed the attentional FM to address the issue of negative impact o
 From the model training perspective, in addition to learn the weights of the FM, the weights of the attention network
 also needs to be learnt.
 
-![](imgs/ijcai2017-2.png)
+
+<p align="center">
+    <img align="center" src="imgs/ijcai2017-2.png">
+</p>

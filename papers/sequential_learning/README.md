@@ -20,7 +20,10 @@ Address the limitation of fixed length memory by extend the memory storage with 
 
 The input of the attention network is the concatenation of the previous hidden state of the decoder $h_{i-1}$ and the a hidden state $h_j$, the output would be the weight/importance of the input $x_j$ to $y_i$. Note that all the input have some contribution to the target $y_i$. The softmax will be applied to all the weight for normalization and the weighted sum of the hidden states $h_1, ..., h_t$ with respect with the weights will be the context vector $c_i$ for target $y_i$. Then a nonlinear, potentially multi-layered function $g(y_{i-1}, s_i, c_i)$ is used to get the target output.
 
-![](imgs/iclr2015.png)
+<p align="center">
+    <img align="center" src="imgs/iclr2015.png">
+</p>
+
 
 
 
