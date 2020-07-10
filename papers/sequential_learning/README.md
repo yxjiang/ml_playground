@@ -11,7 +11,11 @@ Recommender System Paper
 
 ## <a id="nips2014">[Sequence to Sequence Learning with Neural Networks](https://papers.nips.cc/paper/5346-sequence-to-sequence-learning-with-neural-networks.pdf)
 
-Proposed neural machine translation and proposed the encoding/decoding architecture. The input first go through an encoder to encode the information into a fixed length memory (the hidden layer of RNN), then the hidden states are feed to the decoder to get the output.
+Proposed neural machine translation and proposed the encoding/decoding architecture. The input first go through an encoder (Multilayer LSTM) to encode the information into a fixed length memory, then the information in the fixed length memory are feed to the decoder to get the output. Additionally, the model was feed with input sentence in the reverse order. The argument is that the reverse order can make it easy for SGD to "establish communication" between the input and the output. **This could be true for later words in the input sentence, but the information of the earlier words will loss even more, as they are further from the targets. However, the overall benefits are larger than the drawbacks.**
+
+<p align="center">
+    <img src="imgs/nips2014.png">
+</p>
 
 
 ## <a id="iclr2015">[Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/pdf/1409.0473.pdf)
