@@ -22,20 +22,22 @@ Proposed neural machine translation and proposed the encoding/decoding architect
 
 Address the limitation of fixed length memory by extend the memory storage with an attention network (a feed forward net with 1 hidden layer). Additionally, both encoder/decoder are using bi-directional RNN to provide both the pre-context and post-context of the current target.
 
-The input of the attention network is the concatenation of the previous hidden state of the decoder $h_{i-1}$ and the a hidden state $h_j$, the output would be the weight/importance of the input $x_j$ to $y_i$. Note that all the input have some contribution to the target $y_i$. The softmax will be applied to all the weight for normalization and the weighted sum of the hidden states $h_1, ..., h_t$ with respect with the weights will be the context vector $c_i$ for target $y_i$. Then a nonlinear, potentially multi-layered function $g(y_{i-1}, s_i, c_i)$ is used to get the target output.
+The output of the network is quantified as $g(y_{i-1}, s_i, c_i)$, where $s_i$ is the hidden state of the decoder and $c_i$ is the context vector, which is calculated as the weighted sum of the hidden states of the encoders, i.e. $c_i = \sum_{j=1}^{T_x} \alpha_{ij} h_j$. $\alpha_{ij}$ is the weight of hidden state of encoder at time j respect to the output of the decoder at time i, which is quantified as $\alpha_{ij} = softmax(e_{ik}). $e_{ik}$ is the output of the attention network (a MLP) by feeding $s_{i-1}$ and $h_k$ $e_{ik} = a(s_{i-1}, h_k)$. 
 
 <p align="center">
-    <img align="center" src="imgs/iclr2015.png">
+    <img src="imgs/iclr2015.png">
 </p>
-
-
 
 
 ## <a id="acl2016">[Long Short-Term Memory-Networks for Machine Reading](https://arxiv.org/pdf/1601.06733.pdf)
 
-Addressed the limitation of recurrent NNs: 1) EliminatedGradient vanish/exploding; 2) Unable to keep long term memory for earlier input in the sequence; 3) No reasoning over structure and no explicit relationship information retained among input tokens.
+Addressed the limitations of recurrent NNs: 1) Gradient vanish/exploding; 2) Unable to keep long term memory for earlier input in the sequence; 3) No reasoning over structure and no explicit relationship information retained among input tokens.
 
-Improved the LSTM by replacing the gates (forget, input, output) with networks.
+Improved the LSTM by keep all the history of the cell states $C = (c_1,...,c_{t-1})$ and the hidden states $H=(h1,...,h_{t-1})$. And the new cell state and hidden state are calculated based on the entire history in a weighted sum approach, i.e. $\tilde{h_t} = \sum_{i=1}^{t-1} s_i^t h_i$, where $s^t_i = softmax(a_i^t)$ and $a^t_i = v^T tanh(W_h h_i + W_x x_t + W_{\tilde{h}}\tilde{h_{t-1}})$.
+
+<p align="center">
+    <img src="imgs/acl2016.png">
+</p>
 
 
 ## <a id="nips2017">[Attention Is All You Need](http://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf)
