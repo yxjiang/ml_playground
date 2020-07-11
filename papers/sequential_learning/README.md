@@ -1,4 +1,4 @@
-Recommender System Paper
+Sequential Learning Paper
 
 |  Year | Category  | Title  |  
 |---|---|---|
