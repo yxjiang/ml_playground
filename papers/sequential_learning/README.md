@@ -34,11 +34,13 @@ The output of the network is quantified as $g(y_{i-1}, s_i, c_i)$, where $s_i$ i
 
 ## <a id="emnlp2015">[Effective Approaches to Attention-based Neural Machine Translation](https://www.aclweb.org/anthology/D15-1166.pdf)
 
-Proposed the global and local attention and integrate them into NMT. For global attention, all the hidden state of the encoder are used when deriving the context vector $c_t$, i.e. $c_t = \frac{1}{n} \sum a_t \bar{h}_s$ ($\bar{h}_s$ as the source hidden state). 
+Proposed the global and local attention and integrate them into NMT. 
 
-The alignment vector $a_t$ is quantified as the alignment function $a_t(s) = \frac{exp(score(h_t, \bar{h}_s))}{\sum_{s'}exp(score(h_t, \bar{h}_s))}$, where $score(h_t, \bar{h}_s) = h_t^T \bar{h}_s$ (dot) or $h_t^T W_a \bar{h}_s$ (general) or $W_a [h_t; \bar{h}_s]$ (concat).
+For global attention, all the hidden state of the encoder are used when deriving the context vector $c_t$, i.e. $c_t = \frac{1}{n} \sum a_t \bar{h}_s$ ($\bar{h}_s$ as the source hidden state). 
 
-Once obtained the context vector $c_t$, the attentional hidden state of the target $\tilde{h}_t = tanh(W_c [c_t; h_t])$, and the final output $p(y_t | y_{<t}, x) = softmax(W_s \tilde{h}_t)$.
+The alignment vector $a_t$ is quantified as the alignment function $a_t(s) = \frac{exp(score(h_t, \bar{h}_s))}{\sum_{s'}exp(score(h_t, \bar{h}_s))}$, where $score(h_t, \bar{h}_s) = h_t^T \bar{h}_s$ (dot) or $h_t^T W_a \bar{h}_s$ (general) or $W_a [h_t; \bar{h}_s]$ (concat). Once obtained the context vector $c_t$, the attentional hidden state of the target $\tilde{h}_t = tanh(W_c [c_t; h_t])$, and the final output $p(y_t | y_{<t}, x) = softmax(W_s \tilde{h}_t)$.
+
+For local attention, $c_t$ is derived as the weighted average of the set of source hidden states within the window $[p_t - D, p_t + D]$, where $p_t$ is the aligned position for target word at time $t$ as $p_t$. There are two ways of setting $p_t$: 1) Monotonic alignment (local-m) by simply set $p_t = t$. 2) Predictive alignment (local-p) by set $p_t = S * sigmoid(v^T_p tanh(W_p h_t))$, where $v^T_p$ and $W_p$ are the parameters. The weight of each source hidden state $\bar{h}_s$ is then quantified as $a_t(s) = align(h_t, \bar{h}_s) exp (-\frac{(s-p_t)^2}{2\sigma_2})$, where $\sigma = \frac{D}{2}$.
 
 
 <p align="center">
