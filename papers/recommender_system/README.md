@@ -10,6 +10,8 @@ Recommender System Paper
 | IJCAI2017 | DeepFM  | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](#ijcai2017) |
 | ADKDD2017 | Deep&Cross NN | [Deep & Cross Network for Ad Click Predictions](#adkdd2017) |
 | IJCAI2017-2 | Attentional FM | [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Network](#ijcai2017-2) | 
+| KDD2018 | Local activation | [Deep Interest Network for Click-Through Rate Prediction](#kdd2018) |
+
 
 
 ## <a id="adkdd2014">[Practical lessons from predicting clicks on ads at facebook](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.718.9050&rep=rep1&type=pdf)
@@ -105,3 +107,8 @@ also needs to be learnt.
 <p align="center">
     <img align="center" src="imgs/ijcai2017-2.png">
 </p>
+
+
+## <a id="kdd2018"> [Deep Interest Network for Click-Through Rate Prediction](https://arxiv.org/pdf/1706.06978.pdf)
+
+TBA

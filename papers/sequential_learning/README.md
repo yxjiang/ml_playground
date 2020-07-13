@@ -4,8 +4,12 @@ Sequential Learning Paper
 |---|---|---|
 | NIPS2014	  | Seq2Seq with RNN  | [Sequence to Sequence Learning with Neural Networks](#nipsd2014)  |
 | ICLR2015  | Attention and bi-RNN  | [Neural Machine Translation by Jointly Learning to Align and Translate](#iclr2015)  |
+| ICML2015 | Hard and Soft attention | [Show, attend and tell: neural image caption generation with visual attention](#icml2015) |
+| EMNLP2015 | Attention based NMT | [Effective Approaches to Attention-based Neural Machine Translation](#emnlp2015) |
 | ACL2016  | Self-attention with LSTM  | [Long Short-Term Memory-Networks for Machine Reading](#acl2016)  | 
+| ICML2017 | Positional Encoding | [Convolutional Sequence to Sequence Learning](#icml2017) |
 | NIPS2017  | Transformer with multi-head attention | [Attention Is All You Need](#nips2017)  |
+| NAACL-HLT2019 | BERT | [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](#naacl2019) |
 
 
 
@@ -28,6 +32,23 @@ The output of the network is quantified as $g(y_{i-1}, s_i, c_i)$, where $s_i$ i
     <img src="imgs/iclr2015.png">
 </p>
 
+## <a id="emnlp2015">[Effective Approaches to Attention-based Neural Machine Translation](https://www.aclweb.org/anthology/D15-1166.pdf)
+
+Proposed the global and local attention and integrate them into NMT. For global attention, all the hidden state of the encoder are used when deriving the context vector $c_t$, i.e. $c_t = \frac{1}{n} \sum a_t \bar{h}_s$ ($\bar{h}_s$ as the source hidden state). 
+
+The alignment vector $a_t$ is quantified as the alignment function $a_t(s) = \frac{exp(score(h_t, \bar{h}_s))}{\sum_{s'}exp(score(h_t, \bar{h}_s))}$, where $score(h_t, \bar{h}_s) = h_t^T \bar{h}_s$ (dot) or $h_t^T W_a \bar{h}_s$ (general) or $W_a [h_t; \bar{h}_s]$ (concat).
+
+Once obtained the context vector $c_t$, the attentional hidden state of the target $\tilde{h}_t = tanh(W_c [c_t; h_t])$, and the final output $p(y_t | y_{<t}, x) = softmax(W_s \tilde{h}_t)$.
+
+
+<p align="center">
+    <img src="imgs/emnlp2015-1.png" align="center">
+    <img src="imgs/emnlp2015-2.png" align="center">
+</p>
+
+## <a id="icml2015">[Show, attend and tell: neural image caption generation with visual attention](https://www.aclweb.org/anthology/D15-1166.pdf)
+
+TBA
 
 ## <a id="acl2016">[Long Short-Term Memory-Networks for Machine Reading](https://arxiv.org/pdf/1601.06733.pdf)
 
@@ -39,9 +60,21 @@ Improved the LSTM by keep all the history of the cell states $C = (c_1,...,c_{t-
     <img src="imgs/acl2016.png">
 </p>
 
+## <a id="icml2017">[Convolutional Sequence to Sequence Learning](https://arxiv.org/pdf/1705.03122.pdf)
+
+Proposed a method that to conduct seq2seq learning entirely based on CNN. The benefit of leveraging CNN is to achieve the maximal parallelism during model training/inference. 
+
+TBA
+
 
 ## <a id="nips2017">[Attention Is All You Need](http://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf)
 
 Abandon recurrent NN and only use feed forward and attention mechanism for feature extraction for sequential data.
 
 
+TBA
+
+
+## <a id="naacl2019>[BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://www.aclweb.org/anthology/N19-1423.pdf)
+
+TBA

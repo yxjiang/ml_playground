@@ -11,19 +11,22 @@ Representation Learning Paper
 
 <a id="acl2013">[Linguistic Regularities in Continuous Space Word Representations](https://www.aclweb.org/anthology/N13-1090.pdf)
 
-
+TBA
 
 
 <a id="iclr2013">[Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/pdf/1301.3781.pdf)
 
+TBA
 
 
 <a id="acl2014">[GloVe: Global Vectors for Word Representation](https://nlp.stanford.edu/pubs/glove.pdf)
 
-
-
+TBA
 
 <a id="acl2018">[Deep contextualized word representations](https://arxiv.org/pdf/1802.05365.pdf)
 
+TBA
 
 <a id="radford2018">[Improving Language Understanding by Generative Pre-Training](https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf)
+
+TBA
