@@ -75,6 +75,6 @@ Abandon recurrent NN and only use feed forward and attention mechanism for featu
 TBA
 
 
-## <a id="naacl2019>[BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://www.aclweb.org/anthology/N19-1423.pdf)
+## <a id="naacl2019">[BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://www.aclweb.org/anthology/N19-1423.pdf)
 
 TBA
