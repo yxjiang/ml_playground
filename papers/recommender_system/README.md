@@ -6,7 +6,8 @@ Recommender System Paper
 | CIKM2015  | CNN  | [A Convolutional Click Prediction Model](#cikm2015)  |
 | ECIR2016  | FM Neural Nets  | [Deep Learning over Multi-field Categorical Data: A Case Study on User Response Prediction](#ecir2016)  | 
 | ICDM2016  | Product-based NN | [Product-based neural networks for user response prediction](#icdm2016)  |
-| DLRS2016  | Wide & Deep  | [Wide & Deep Learning for Recommender Systems](#dlrs2016)
+| DLRS2016  | Wide & Deep  | [Wide & Deep Learning for Recommender Systems](#dlrs2016) |
+| RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
 | IJCAI2017 | DeepFM  | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](#ijcai2017) |
 | ADKDD2017 | Deep&Cross NN | [Deep & Cross Network for Ad Click Predictions](#adkdd2017) |
 | IJCAI2017-2 | Attentional FM | [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Network](#ijcai2017-2) | 
@@ -72,6 +73,10 @@ The deep part is a DNN model that tries to learn a general representation of the
     <img align="center" src="imgs/dlrs2016-1.png">
 </p>
 
+## <a id="rescsys2016">[Deep Neural Networks for YouTube Recommendations](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf)
+
+TBA
+
 
 ## <a id="ijcai2017">[DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](https://www.ijcai.org/Proceedings/2017/0239.pdf)
 
@@ -105,10 +110,17 @@ also needs to be learnt.
 
 
 <p align="center">
-    <img align="center" src="imgs/ijcai2017-2.png">
+    <img src="imgs/ijcai2017-2.png">
 </p>
 
 
 ## <a id="kdd2018"> [Deep Interest Network for Click-Through Rate Prediction](https://arxiv.org/pdf/1706.06978.pdf)
 
-TBA
+Proposed the Deep Interest Network that adaptively calculate the representation vector of user interests by taking into consideration of the relevance between historical behaviors and the current recommended candidate, with the introduction of the local activation unit. Additionally, this paper proposed the mini-batch aware regularizer and a data adaptive activation function to ease the model training.
+
+For each of the feature groups (one-hot encoding or multi-hot encodings of the same feature), embeddings are learned and then pooled (sum/avg pooling for each of the embedding vectors transformed from the multi-hot encoding) so that each feature group would have one embedding vector. The user behavior embedding vectors are then weighted summed according to its relevance to the candidate ad via the activation units, i.e. $v_u(A) = f(v_a, e_1, e_2, ..., e_H) = \sum_{j=1}^H a(e_j, v_a)e_j$, where H is the number of such feature groups and $a(\dot)$ is the activation unit in form of feed-forward NN with output as the weight.
+
+<p align="center">
+    <img src="imgs/kdd2018-1.png">
+</p>
+
