@@ -11,7 +11,8 @@ Recommender System Paper
 | IJCAI2017 | DeepFM  | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](#ijcai2017) |
 | ADKDD2017 | Deep&Cross NN | [Deep & Cross Network for Ad Click Predictions](#adkdd2017) |
 | IJCAI2017-2 | Attentional FM | [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Network](#ijcai2017-2) | 
-| KDD2018 | Local activation | [Deep Interest Network for Click-Through Rate Prediction](#kdd2018) |
+| KDD2018 | Adaptive user interest with local activation | [Deep Interest Network for Click-Through Rate Prediction](#kdd2018) |
+| AAAI2019 | Latent and evoluted user interest | [Deep Interest Evolution Network for Click-Through Rate Prediction](#aaai2019) | 
 
 
 
@@ -116,7 +117,7 @@ also needs to be learnt.
 
 ## <a id="kdd2018"> [Deep Interest Network for Click-Through Rate Prediction](https://arxiv.org/pdf/1706.06978.pdf)
 
-Proposed the Deep Interest Network that adaptively calculate the representation vector of user interests by taking into consideration of the relevance between historical behaviors and the current recommended candidate, with the introduction of the local activation unit. Additionally, this paper proposed the mini-batch aware regularizer and a data adaptive activation function to ease the model training.
+Proposed the Deep Interest Network (DIN) that adaptively calculate the representation vector of user interests by taking into consideration of the relevance between historical behaviors and the current recommended candidate, with the introduction of the local activation unit. Additionally, this paper proposed the mini-batch aware regularizer and a data adaptive activation function to ease the model training.
 
 For each of the feature groups (one-hot encoding or multi-hot encodings of the same feature), embeddings are learned and then pooled (sum/avg pooling for each of the embedding vectors transformed from the multi-hot encoding) so that each feature group would have one embedding vector. The user behavior embedding vectors are then weighted summed according to its relevance to the candidate ad via the activation units, i.e. $v_u(A) = f(v_a, e_1, e_2, ..., e_H) = \sum_{j=1}^H a(e_j, v_a)e_j$, where H is the number of such feature groups and $a(\dot)$ is the activation unit in form of feed-forward NN with output as the weight.
 
@@ -124,3 +125,11 @@ For each of the feature groups (one-hot encoding or multi-hot encodings of the s
     <img src="imgs/kdd2018-1.png">
 </p>
 
+
+## <a id="aaai2019"> [Deep Interest Evolution Network for Click-Through Rate Prediction](https://arxiv.org/pdf/1809.03672.pdf)
+
+Proposed the Deep Interest Evolution Network (DIEN) to learn the latent user interests from the explicit user behaviors (e.g. sequence of actions). Additionally, it can capture the temporal dynamics of the user interest evolution with the proposed the interests extractor layer with AUGRU, a GRU with the attention update gate ($\tilde{u}_t = a_t \cdot u_t$ where $a_t = \frac{exp(h_tWe_a)}{\sum_{j=1}^T exp(h_jWe_a)}$, and then $h_t = (1 - \tilde{u}_t) h_{t-1} + \tilde{u}_t \tilde{h}_t$. Additionally, it leverages the auxiliary loss function that explicitly calculate the loss for each of the hidden states to achieve better representation learning. Combined with the attention mechanism, the evolves of multiple interests can be captured and decomposed separately.
+
+<p align="center">
+    <img src="imgs/iaaa2019.png">
+</p>
