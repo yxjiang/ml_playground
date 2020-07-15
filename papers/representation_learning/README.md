@@ -3,7 +3,7 @@ Representation Learning Paper
 |  Year | Category  | Title  |  
 |---|---|---|
 | ACL2013  |   | [Linguistic Regularities in Continuous Space Word Representations](#acl2013)  |
-| ICLR2013	  | Word2Vec  | [Efficient Estimation of Word Representations in Vector Space](#iclr2013)  |
+| ICLR2013	  | Skip-gram and CBOW  | [Efficient Estimation of Word Representations in Vector Space](#iclr2013)  |
 | ACL2014  | Word Embedding  | [GloVe: Global Vectors for Word Representation](#acl2014)  | 
 | ACL2018 | Word Embedding | [Deep contextualized word representations](#acl2018) |
 | radford2018 | Word Embedding | [Improving Language Understanding by Generative Pre-Training](#radford2018)

@@ -10,10 +10,10 @@
 | RecSys2010 | System | [The YouTube Video Recommendation System](#recsys2010) |
 | ADKDD2014	  | System  | [Practical lessons from predicting clicks on ads at facebook](#adkdd2014)  |
 | CIKM2015  | CNN  | [A Convolutional Click Prediction Model](#cikm2015)  |
+| RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
 | ECIR2016  | FM Neural Nets  | [Deep Learning over Multi-field Categorical Data: A Case Study on User Response Prediction](#ecir2016)  | 
 | ICDM2016  | Product-based NN | [Product-based neural networks for user response prediction](#icdm2016)  |
 | DLRS2016  | Wide & Deep  | [Wide & Deep Learning for Recommender Systems](#dlrs2016) |
-| RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
 | IJCAI2017 | DeepFM  | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](#ijcai2017) |
 | ADKDD2017 | Deep&Cross NN | [Deep & Cross Network for Ad Click Predictions](#adkdd2017) |
 | IJCAI2017-2 | Attentional FM | [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Network](#ijcai2017-2) | 
@@ -44,6 +44,22 @@ Proposed the convolution click prediction model by leveraging the sequential beh
     <img align="center" src="imgs/cikm2015-1.png">
 </p>
 
+### <a id="recsys2016">[Deep Neural Networks for YouTube Recommendations](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf)
+
+This paper briefly introduces the system architecture of the Youtube recommendation in 2016, which includes the candidate generation component and the ranking component for the online part, and then training data preparing and model training for the offline part.
+
+**Candidate generation**: The candidate generation is formulated as a classification problem that estimate the watch probability of a candidate video i, user info U, and the context C, i.e. $P(i | U, C) = \frac{e^{v_iu}}{\sum_{j \in V} e^{v_j u}}$, where $u$ is the embedding of the user, context pair and $v_j$ is the embedding of the candidate video. To speed up the model training, negative sub-sampling strategy is used for weight update. For model serving, approximate scoring is leveraged. The dot product between the user embedding ant the video embedding is essentially similarity search.
+
+<p align="center">
+    <img src="imgs/recsys2016-1.png">
+</p>
+
+**Training data preparing**: The training data is collected in and out of the recommendation pages. This is because it is important to quickly surface new video contents into recommendation. Additionally, each user would have a fixed number of training samples to weighting users equally in the loss function.
+
+**Ranking**: A similar DNN architecture is leveraged, but with more features, including impression video embedding, language embedding (user language and video language) and many temporal related features. All categorical features are represented as embeddings and the continuous features are normalized.
+<p align="center">
+    <img src="imgs/recsys2016-2.png">
+</p>
 
 ### <a id="ecir2016">[Deep Learning over Multi-field Categorical Data: A Case Study on User Response Prediction](https://arxiv.org/pdf/1601.02376.pdf)
 
@@ -72,6 +88,7 @@ This is one paper focused on the representation learning of the input features b
 
 The model architecture proposed in this paper is an incremental updating from the architecture proposed in the [FNN](#ecir2016) paper. Instead of doing pre-training for the first hidden layer, PNN added the embedding layer to learn the low level representation of the input features.
 
+
 ### <a id="dlrs2016">[Wide & Deep Learning for Recommender Systems](https://arxiv.org/pdf/1606.07792.pdf)
 
 This paper proposed a new model architecture for the recommender systems, wide & deep. The wide part and deep part are feed to one common logistic loss function and are trained jointly.
@@ -83,12 +100,6 @@ The deep part is a DNN model that tries to learn a general representation of the
 <p align="center">
     <img align="center" src="imgs/dlrs2016-1.png">
 </p>
-
-### <a id="rescsys2016">[Deep Neural Networks for YouTube Recommendations](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf)
-
-This paper briefly introduces the system architecture of the Youtube recommendation in 2016, which includes the candidate generation component and the ranking component for the online part, and then training data preparing and model training for the offline part.
-
-The candidate generation
 
 
 ### <a id="ijcai2017">[DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](https://www.ijcai.org/Proceedings/2017/0239.pdf)
