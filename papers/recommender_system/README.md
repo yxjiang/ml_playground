@@ -4,7 +4,7 @@
 
 The general idea of candidate generation is to pre-filter candidates from a huge number (millions to billions) to an acceptable number (<1000) so that the later ranking stage is able to handle the data volume during online serving. 
 
-In the early years, the typical approach for candidate generation is through heuristic or collaborative filtering, those methods requires too many manual work and is unable to handle data sparsity issue. In recent years, representation learning is emerging and the state-of-art candidate generation is through embedding dot product, e.g. $score = e_u \dot e_i$, where $e_u$ is the embedding of the user and $e_i$ is the embedding of the candidate. For retrieve $e_i$, similarity search approaches are leveraged.
+In the early years, the typical approach for candidate generation is through heuristic or collaborative filtering, those methods requires too many manual work and is unable to handle data sparsity issue. In recent years, representation learning is emerging and the state-of-art candidate generation is through embedding dot product, e.g. $score = e_u \dot e_i$, where $e_u$ is the embedding of the user and $e_i$ is the embedding of the candidate. For retrieve $e_i$, similarity search approaches are leveraged like [FAISS](https://engineering.fb.com/data-infrastructure/faiss-a-library-for-efficient-similarity-search/).
 
 
 ## Ranking
