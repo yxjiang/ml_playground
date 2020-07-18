@@ -6,6 +6,37 @@ The general idea of candidate generation is to pre-filter candidates from a huge
 
 In the early years, the typical approach for candidate generation is through heuristic or collaborative filtering, those methods requires too many manual work and is unable to handle data sparsity issue. In recent years, representation learning is emerging and the state-of-art candidate generation is through embedding dot product, e.g. $score = e_u \dot e_i$, where $e_u$ is the embedding of the user and $e_i$ is the embedding of the candidate. For retrieve $e_i$, similarity search approaches are leveraged like [FAISS](https://engineering.fb.com/data-infrastructure/faiss-a-library-for-efficient-similarity-search/).
 
+|  Year | Category  | Title  |  
+|---|---|---|
+| RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
+| CIKM2019 | Sequential deep matching | [SDM: Sequential Deep Matching Model for Online Large-scale Recommender System](#cikm2019)
+
+### <a id="recsys2016">[Deep Neural Networks for YouTube Recommendations](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf)
+
+This paper briefly introduces the system architecture of the Youtube recommendation in 2016, which includes the candidate generation component and the ranking component for the online part, and then training data preparing and model training for the offline part.
+
+**Candidate generation**: The candidate generation is formulated as a classification problem that estimate the watch probability of a candidate video i, user info U, and the context C, i.e. $P(i | U, C) = \frac{e^{v_iu}}{\sum_{j \in V} e^{v_j u}}$, where $u$ is the embedding of the user, context pair and $v_j$ is the embedding of the candidate video. 
+
+The training data is collected in and out of the recommendation pages. This is because it is important to quickly surface new video contents into recommendation. Additionally, each user would have a fixed number of training samples to weighting users equally in the loss function. To speed up the model training, negative sub-sampling strategy is used for weight update and the loss is minimized for the true label and the sampled negative classes. For model serving, approximate scoring is leveraged. The dot product between the user embedding ant the video embedding is essentially similarity search.
+
+<p align="center">
+    <img src="imgs/recsys2016-1.png">
+</p>
+
+**Ranking**: A similar DNN architecture is leveraged, but with more features, including impression video embedding, language embedding (user language and video language) and many temporal related features. All categorical features are represented as embeddings and the continuous features are normalized.
+<p align="center">
+    <img src="imgs/recsys2016-2.png">
+</p>
+
+### <a id="cikm2019">[SDM: Sequential Deep Matching Model for Online Large-scale Recommender System](https://arxiv.org/pdf/1909.00385.pdf)
+
+Proposed the sequential deep matching model that leverages both the short term user behavior and long term user behavior to learn the user representations for candidate matching. The short term user behavior indicates the latest m user actions and the long term user behavior are the ones happened with the past 7 days before the short term behavior. 
+
+Each item in both of the short term sequence and the long term sequences are represented by one-hot encoding and transformed by the embedding layer. For short term behavior, the embeddings are feed to the LSTM with multi-head self-attention. The long term user behavior are described in various perspectives: id, leaf category, category, brand, and shop. Then an attention score is calculated based on these perspectives with respect to the user profile embedding. Finally, the short term representation are fused with the long term representation with a specifically designed gate.
+
+<p align="center">
+    <img src="imgs/cikm2019-1.png">
+</p>
 
 ## Ranking
 
@@ -14,7 +45,6 @@ In the early years, the typical approach for candidate generation is through heu
 | RecSys2010 | System | [The YouTube Video Recommendation System](#recsys2010) |
 | ADKDD2014	  | System  | [Practical lessons from predicting clicks on ads at facebook](#adkdd2014)  |
 | CIKM2015  | CNN  | [A Convolutional Click Prediction Model](#cikm2015)  |
-| RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
 | ECIR2016  | FM Neural Nets  | [Deep Learning over Multi-field Categorical Data: A Case Study on User Response Prediction](#ecir2016)  | 
 | ICDM2016  | Product-based NN | [Product-based neural networks for user response prediction](#icdm2016)  |
 | DLRS2016  | Wide & Deep  | [Wide & Deep Learning for Recommender Systems](#dlrs2016) |
@@ -46,23 +76,6 @@ Proposed the convolution click prediction model by leveraging the sequential beh
 
 <p align="center">
     <img align="center" src="imgs/cikm2015-1.png">
-</p>
-
-### <a id="recsys2016">[Deep Neural Networks for YouTube Recommendations](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf)
-
-This paper briefly introduces the system architecture of the Youtube recommendation in 2016, which includes the candidate generation component and the ranking component for the online part, and then training data preparing and model training for the offline part.
-
-**Candidate generation**: The candidate generation is formulated as a classification problem that estimate the watch probability of a candidate video i, user info U, and the context C, i.e. $P(i | U, C) = \frac{e^{v_iu}}{\sum_{j \in V} e^{v_j u}}$, where $u$ is the embedding of the user, context pair and $v_j$ is the embedding of the candidate video. To speed up the model training, negative sub-sampling strategy is used for weight update. For model serving, approximate scoring is leveraged. The dot product between the user embedding ant the video embedding is essentially similarity search.
-
-<p align="center">
-    <img src="imgs/recsys2016-1.png">
-</p>
-
-**Training data preparing**: The training data is collected in and out of the recommendation pages. This is because it is important to quickly surface new video contents into recommendation. Additionally, each user would have a fixed number of training samples to weighting users equally in the loss function.
-
-**Ranking**: A similar DNN architecture is leveraged, but with more features, including impression video embedding, language embedding (user language and video language) and many temporal related features. All categorical features are represented as embeddings and the continuous features are normalized.
-<p align="center">
-    <img src="imgs/recsys2016-2.png">
 </p>
 
 ### <a id="ecir2016">[Deep Learning over Multi-field Categorical Data: A Case Study on User Response Prediction](https://arxiv.org/pdf/1601.02376.pdf)
