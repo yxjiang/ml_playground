@@ -70,7 +70,7 @@ def get_vocabulary(folder_path, file_suffix, check_interval=50000):
                     sub_vocab |= set(line.strip().split(" "))
         elif file_suffix == "vocab":
             with open(filepath, "r") as f:
-                sub_vocab |= set(f.readlines())
+                sub_vocab |= set([w.strip() for w in f.readlines()])
         else:
             raise Exception("Suffix [%s] not supported for calculating the vocabulary." % (file_suffix))
         vocab |= sub_vocab
