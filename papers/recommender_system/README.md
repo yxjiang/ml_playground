@@ -9,7 +9,8 @@ In the early years, the typical approach for candidate generation is through heu
 |  Year | Category  | Title  |  
 |---|---|---|
 | RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
-| CIKM2019 | Sequential deep matching | [SDM: Sequential Deep Matching Model for Online Large-scale Recommender System](#cikm2019)
+| CIKM2019 | Sequential deep matching | [SDM: Sequential Deep Matching Model for Online Large-scale Recommender System](#cikm2019) |
+| CIKM2019 | Multi-interest modeling | [Multi-Interest Network with Dynamic Routing for Recommendation at Tmall](#cikm2019-2) |
 
 ### <a id="recsys2016">[Deep Neural Networks for YouTube Recommendations](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf)
 
@@ -37,6 +38,13 @@ Each item in both of the short term sequence and the long term sequences are rep
 <p align="center">
     <img src="imgs/cikm2019-1.png">
 </p>
+
+
+### <a id="cikm2019-2">[Multi-Interest Network with Dynamic Routing for Recommendation at Tmall](https://arxiv.org/pdf/1904.08030.pdf)
+
+
+
+
 
 ## Ranking
 
