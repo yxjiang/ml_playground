@@ -75,6 +75,8 @@ def get_vocabulary(folder_path, file_suffix, check_interval=50000):
             raise Exception("Suffix [%s] not supported for calculating the vocabulary." % (file_suffix))
         vocab |= sub_vocab
     word_to_id = defaultdict(int)
-    for i, w in enumerate(vocab, 1):
-        word_to_id[w] = i
-    return word_to_id
+    words = ['N/A']
+    for i, w in enumerate(vocab, 1):  # 0 is for unknown
+        word_to_id[w.lower()] = i
+        words.append(w.lower())
+    return word_to_id, words
