@@ -1,5 +1,7 @@
 # Recommender System Paper
 
+Survey: [Deep Learning based Recommender System: A Survey and New Perspectives (ACM Computing Surveys)](https://arxiv.org/pdf/1707.07435.pdf)
+
 ## Candidate Generation
 
 The general idea of candidate generation is to pre-filter candidates from a huge number (millions to billions) to an acceptable number (<1000) so that the later ranking stage is able to handle the data volume during online serving. 
