@@ -8,6 +8,7 @@ import zipfile
 import tarfile
 from collections import defaultdict
 
+
 def download_data(url, dest_dir="/tmp/data"):
     """
     Download the contents from specified url to the destination folder.
@@ -80,3 +81,66 @@ def get_vocabulary(folder_path, file_suffix, check_interval=50000):
         word_to_id[w.lower()] = i
         words.append(w.lower())
     return word_to_id, words
+
+# transform, dataset and dataloader
+import torch
+from torch.utils.data import Dataset, DataLoader
+from torchvision import transforms
+
+
+class CutOrPadTransform:
+    """
+    Shape all sentences to the equal length.
+    """
+    def __init__(self, config):
+        self.config = config
+    
+    def __call__(self, input):
+        if len(input["words"]) >= self.config.sentence_max_length:
+            input["words"] = input["words"][:self.config.sentence_max_length]
+        else:
+            input["words"].extend([" "] * (self.config.sentence_max_length - len(input["words"])))
+        return input
+
+
+class WordsToIdsTransform:
+    """
+    Convert the list of words to embeddings.
+    """
+    def __init__(self, config, word_to_id):
+        self.config = config
+        self.word_to_id = word_to_id
+    
+    def __call__(self, input):
+        input["word_ids"] = torch.tensor([self.word_to_id[w.lower()] for w in input["words"]], dtype=torch.long)
+        return input
+
+
+class MovieReviewDataset(Dataset):
+    def __init__(self, config, pos_data_folder, neg_data_folder, word_to_id, transform):
+        self.config = config
+        self.word_to_id = word_to_id
+        self.data = []
+        # read all data into memory
+        for filename in os.listdir(pos_data_folder):
+            if filename.endswith(".txt"):
+                with open(os.path.join(pos_data_folder, filename), "r") as f:
+                    self.data.append((f.readline(), 1))
+
+        for filename in os.listdir(neg_data_folder):
+            if filename.endswith(".txt"):
+                with open(os.path.join(neg_data_folder, filename), "r") as f:
+                    self.data.append((f.readline(), 0))
+
+        self.transform = transform
+    
+    def __getitem__(self, idx):
+        words = [w.strip() for w in self.data[idx][0].strip().split(" ")]
+        label = self.data[idx][1]
+        input = self.transform({"words": words, "label": label})
+        # print(input["words"], "\n", input["word_ids"], "\n", input["label"])
+        return input["words"], input["word_ids"], input["label"]
+        
+
+    def __len__(self):
+        return len(self.data)
