@@ -1,5 +1,8 @@
 ### Changelog
 
+2020/07/26
+* Allow config to set arbitrary values
+
 2020/07/25
 * Make RNN classification model configurable to use RNN, LSTM, and GRU
 * Make RNN classification model configurable on the number of layers
