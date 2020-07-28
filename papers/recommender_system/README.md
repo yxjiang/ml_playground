@@ -67,6 +67,7 @@ Each item in both of the short term sequence and the long term sequences are rep
 | ADKDD2017 | Deep&Cross NN | [Deep & Cross Network for Ad Click Predictions](#adkdd2017) |
 | IJCAI2017-2 | Attentional FM | [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Network](#ijcai2017-2) | 
 | KDD2018 | Adaptive user interest with local activation | [Deep Interest Network for Click-Through Rate Prediction](#kdd2018) |
+| KDD2018 | Knowledge distillation | [Ranking Distillation: Learning Compact Ranking Models With High Performance for Recommender System](#kdd2018-2) |
 | AAAI2019 | Latent and evoluted user interest | [Deep Interest Evolution Network for Click-Through Rate Prediction](#aaai2019) | 
 
 
@@ -178,6 +179,14 @@ For each of the feature groups (one-hot encoding or multi-hot encodings of the s
 
 <p align="center">
     <img src="imgs/kdd2018-1.png">
+</p>
+
+### <a id="kdd2018-2"> [Ranking Distillation: Learning Compact Ranking Models With High Performance for Recommender System](https://arxiv.org/pdf/1809.07428.pdf)
+
+Proposed a ranking distillation mechanism that first train a complex "teacher" model and leverage both the labeled data and the top-k ranked documents recommended by the "teacher" model to train the "student" model. The loss of the student model is quantified as the weighted sum of the training loss and distillation loss, i. e. $L(\theta) = L_R(y, \hat{y}) + L_D(\pi_{1..k}, hat{y})$, where $L_R(y, \hat{y}) = -(\sum_{i \in y^+} \log P(rel_i=1 | \hat{y}) + \sum_{i \in y^-} 1 - P(rel_i=1 | \hat{y}))$.
+
+<p align="center">
+    <img src="imgs/kdd2018-2.png">
 </p>
 
 
