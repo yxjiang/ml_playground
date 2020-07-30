@@ -6,8 +6,8 @@ from torch.utils.tensorboard import SummaryWriter
 def train(model, config, train_dataloader, test_dataloader, check_interval=50, **kwargs):
     criteria = config.criteria()
     optimizer = config.optimizer(model.parameters(), lr=config.lr)
-    if 'weight_decay' in config.other_params:
-        optimizer.weight_decay = config.other_params['weight_decay']
+    if 'weight_decay' in config.__dict__:
+        optimizer.weight_decay = config.weight_decay
     start = time.time()
     counts = 0
     writer = SummaryWriter(filename_suffix=str(config))

@@ -12,5 +12,17 @@ class Config:
         self.lr = lr
         self.epochs = epochs
         self.batch_size = batch_size
-        self.other_params = kwargs
+        self.__dict__.update(kwargs)
+
+    def __str__(self):
+        blacklist = set(["criteria", "optimizer"])
+        s = ""
+        for key in self.__dict__:
+            if key in blacklist:
+                s += key + '-'
+                if type(self.__dict__) is float:
+                    s += "%.5f" % self.__dict__[key]
+                else:
+                    s += str(self.__dict__[key])
+        return s
         

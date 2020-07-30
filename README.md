@@ -1,5 +1,8 @@
 ### Changelog
 
+2020/07/28
+* Deprecate TextCNNConfig and RNNConfig by making Config flexible to accept arbitrary params.
+
 2020/07/26
 * Allow config to set arbitrary values
 
