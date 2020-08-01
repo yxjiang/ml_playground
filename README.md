@@ -1,5 +1,8 @@
 ### Changelog
 
+2020/07/31
+* Enable bi-direction and multi-layer RNN.
+
 2020/07/28
 * Deprecate TextCNNConfig and RNNConfig by making Config flexible to accept arbitrary params.
 
