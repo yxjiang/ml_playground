@@ -75,7 +75,7 @@ def get_vocabulary(folder_path, file_suffix, check_interval=50000):
         else:
             raise Exception("Suffix [%s] not supported for calculating the vocabulary." % (file_suffix))
         vocab |= sub_vocab
-    word_to_id = defaultdict(int)
+    word_to_id = defaultdict(lambda: 0)
     words = ['N/A']
     for i, w in enumerate(vocab, 1):  # 0 is for unknown
         word_to_id[w.lower()] = i
@@ -88,9 +88,9 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 
-class CutOrPadTransform:
+class TruncateTransform:
     """
-    Shape all sentences to the equal length.
+    Truncate all sentences to the maximal allowed length.
     """
     def __init__(self, config):
         self.config = config
@@ -98,8 +98,6 @@ class CutOrPadTransform:
     def __call__(self, input):
         if len(input["words"]) >= self.config.sentence_max_length:
             input["words"] = input["words"][:self.config.sentence_max_length]
-        else:
-            input["words"].extend([" "] * (self.config.sentence_max_length - len(input["words"])))
         return input
 
 
@@ -112,7 +110,19 @@ class WordsToIdsTransform:
         self.word_to_id = word_to_id
     
     def __call__(self, input):
-        input["word_ids"] = torch.tensor([self.word_to_id[w.lower()] for w in input["words"]], dtype=torch.long)
+        input["word_ids"] = [self.word_to_id[w.lower()] for w in input["words"]]
+        return input
+
+class PadTransform:
+    """
+    Pad all sentences to the equal length.
+    """
+    def __init__(self, config):
+        self.config = config
+    
+    def __call__(self, input):
+        if len(input["word_ids"]) < self.config.sentence_max_length:
+            input["word_ids"].extend([0] * (self.config.sentence_max_length - len(input["word_ids"])))
         return input
 
 
@@ -139,7 +149,7 @@ class MovieReviewDataset(Dataset):
         label = self.data[idx][1]
         input = self.transform({"words": words, "label": label})
         # print(input["words"], "\n", input["word_ids"], "\n", input["label"])
-        return input["words"], input["word_ids"], input["label"]
+        return input["words"], torch.LongTensor(input["word_ids"]), input["label"]
         
 
     def __len__(self):
