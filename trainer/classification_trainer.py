@@ -14,10 +14,11 @@ def train(model, config, train_dataloader, test_dataloader, check_interval=50, *
     # writer.add_graph(model)
     torch.backends.cudnn.benchmark = True
     for epoch in range(config.epochs):
-        for i, (words, word_ids, labels) in enumerate(train_dataloader):
+        for i, (word_ids, labels, x_lens, y_lens) in enumerate(train_dataloader):
             counts += labels.shape[0]
             optimizer.zero_grad()
             output = model(word_ids.to(config.device))
+            print('output:', output.shape, ', labels:', labels.shape)
             loss = criteria(output, labels.to(config.device))
             loss.backward()
             optimizer.step()
