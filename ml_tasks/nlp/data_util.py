@@ -89,17 +89,17 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
 
-# class TruncateTransform:
-#     """
-#     Truncate all sentences to the maximal allowed length.
-#     """
-#     def __init__(self, config):
-#         self.config = config
+class TruncateTransform:
+    """
+    Truncate all sentences to the maximal allowed length.
+    """
+    def __init__(self, config):
+        self.config = config
     
-#     def __call__(self, input):
-#         if len(input["words"]) >= self.config.sentence_max_length:
-#             input["words"] = input["words"][:self.config.sentence_max_length]
-#         return input
+    def __call__(self, input):
+        if len(input["words"]) >= self.config.sentence_max_length:
+            input["words"] = input["words"][:self.config.sentence_max_length]
+        return input
 
 
 class WordsToIdsTransform:
@@ -114,26 +114,24 @@ class WordsToIdsTransform:
         input["word_ids"] = [self.word_to_id[w.lower()] for w in input["words"]]
         return input
 
-# class PadTransform:
-#     """
-#     Pad all sentences to the equal length.
-#     """
-#     def __init__(self, config):
-#         self.config = config
+class PadTransform:
+    """
+    Pad all sentences to the equal length.
+    """
+    def __init__(self, config):
+        self.config = config
     
-#     def __call__(self, input):
-#         if len(input["word_ids"]) < self.config.sentence_max_length:
-#             input["word_ids"].extend([0] * (self.config.sentence_max_length - len(input["word_ids"])))
-#         return input
+    def __call__(self, input):
+        if len(input["word_ids"]) < self.config.sentence_max_length:
+            input["word_ids"].extend([0] * (self.config.sentence_max_length - len(input["word_ids"])))
+        return input
 
 def pad_collate(batch):
-    # print('batch: ', batch)
     _, word_to_id_batch, label_batch = zip(*batch)
     x_lens = [len(word_to_id) for word_to_id in word_to_id_batch]
     y_lens = [1] * len(label_batch)
     word_to_id_pad = pad_sequence(word_to_id_batch, batch_first=True, padding_value=0)
-    label_pad = pad_sequence(label_batch, batch_first=True, padding_value=0)
-    # print('in_pad_collate:', label_batch)
+    label_pad = pad_sequence(label_batch, batch_first=True, padding_value=0).squeeze(1)
     return word_to_id_pad, label_pad, x_lens, y_lens
 
 
