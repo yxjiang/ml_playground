@@ -1,5 +1,8 @@
 ### Changelog
 
+2020/08/02
+* Use batch first and use pad_sequence
+
 2020/07/31
 * Enable bi-direction and multi-layer RNN.
 
