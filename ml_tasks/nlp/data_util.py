@@ -158,7 +158,6 @@ class MovieReviewDataset(Dataset):
         words = [w.strip() for w in self.data[idx][0].strip().split(" ")]
         label = self.data[idx][1]
         input = self.transform({"words": words, "label": label})
-        # print(input["words"], "\n", input["word_ids"], "\n", input["label"])
         return input["words"], torch.LongTensor(input["word_ids"]), torch.LongTensor([input["label"]])
         
 

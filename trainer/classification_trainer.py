@@ -17,7 +17,7 @@ def train(model, config, train_dataloader, test_dataloader, check_interval=50, *
         for i, (word_ids, labels, x_lens, y_lens) in enumerate(train_dataloader):
             counts += labels.shape[0]
             optimizer.zero_grad()
-            output = model(word_ids.to(config.device))
+            output = model(word_ids.to(config.device), x_lens)
             loss = criteria(output, labels.to(config.device))
             loss.backward()
             optimizer.step()
@@ -31,7 +31,7 @@ def train(model, config, train_dataloader, test_dataloader, check_interval=50, *
                 correct = 0
                 total_samples = 0
                 for j, (eval_word_ids, eval_labels, eval_x_lens, eval_y_lens) in enumerate(test_dataloader):
-                    eval_output = model(eval_word_ids.to(config.device))
+                    eval_output = model(eval_word_ids.to(config.device), eval_x_lens)
                     eval_loss = criteria(eval_output, eval_labels.to(config.device))
                     acc_eval_loss += eval_loss.item()
                     batches += 1
