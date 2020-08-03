@@ -14,7 +14,7 @@ def train(model, config, train_dataloader, test_dataloader, check_interval=50, *
     # writer.add_graph(model)
     torch.backends.cudnn.benchmark = True
     for epoch in range(config.epochs):
-        for i, (words, word_ids, labels) in enumerate(train_dataloader):
+        for i, (word_ids, labels, x_lens, y_lens) in enumerate(train_dataloader):
             counts += labels.shape[0]
             optimizer.zero_grad()
             output = model(word_ids.to(config.device))
@@ -30,7 +30,7 @@ def train(model, config, train_dataloader, test_dataloader, check_interval=50, *
                 batches = 0
                 correct = 0
                 total_samples = 0
-                for j, (words, eval_word_ids, eval_labels) in enumerate(test_dataloader):
+                for j, (eval_word_ids, eval_labels, eval_x_lens, eval_y_lens) in enumerate(test_dataloader):
                     eval_output = model(eval_word_ids.to(config.device))
                     eval_loss = criteria(eval_output, eval_labels.to(config.device))
                     acc_eval_loss += eval_loss.item()

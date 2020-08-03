@@ -7,6 +7,7 @@ import os
 import zipfile
 import tarfile
 from collections import defaultdict
+from torch.nn.utils.rnn import pad_sequence
 
 
 def download_data(url, dest_dir="/tmp/data"):
@@ -125,6 +126,15 @@ class PadTransform:
             input["word_ids"].extend([0] * (self.config.sentence_max_length - len(input["word_ids"])))
         return input
 
+def pad_collate(batch):
+    _, word_to_id_batch, label_batch = zip(*batch)
+    x_lens = [len(word_to_id) for word_to_id in word_to_id_batch]
+    y_lens = [1] * len(label_batch)
+    word_to_id_pad = pad_sequence(word_to_id_batch, batch_first=True, padding_value=0)
+    label_pad = pad_sequence(label_batch, batch_first=True, padding_value=0).squeeze(1)
+    return word_to_id_pad, label_pad, x_lens, y_lens
+
+
 
 class MovieReviewDataset(Dataset):
     def __init__(self, config, pos_data_folder, neg_data_folder, word_to_id, transform):
@@ -149,7 +159,7 @@ class MovieReviewDataset(Dataset):
         label = self.data[idx][1]
         input = self.transform({"words": words, "label": label})
         # print(input["words"], "\n", input["word_ids"], "\n", input["label"])
-        return input["words"], torch.LongTensor(input["word_ids"]), input["label"]
+        return input["words"], torch.LongTensor(input["word_ids"]), torch.LongTensor([input["label"]])
         
 
     def __len__(self):
