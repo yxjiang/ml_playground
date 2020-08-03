@@ -62,6 +62,8 @@ Each item in both of the short term sequence and the long term sequences are rep
 | CIKM2015  | CNN  | [A Convolutional Click Prediction Model](#cikm2015)  |
 | ECIR2016  | FM Neural Nets  | [Deep Learning over Multi-field Categorical Data: A Case Study on User Response Prediction](#ecir2016)  | 
 | ICDM2016  | Product-based NN | [Product-based neural networks for user response prediction](#icdm2016)  |
+| KDD2016 | Attention-based matching | [DeepIntent: Learning Attentions for Online Advertising
+with Recurrent Neural Networks](#kdd2016) |
 | DLRS2016  | Wide & Deep  | [Wide & Deep Learning for Recommender Systems](#dlrs2016) |
 | IJCAI2017 | DeepFM  | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](#ijcai2017) |
 | ADKDD2017 | Deep&Cross NN | [Deep & Cross Network for Ad Click Predictions](#adkdd2017) |
@@ -133,6 +135,15 @@ The deep part is a DNN model that tries to learn a general representation of the
 <p align="center">
     <img align="center" src="imgs/dlrs2016-1.png">
 </p>
+
+### <a id="kdd2016">[DeepIntent: Learning Attentions for Online Advertising with Recurrent Neural Networks](https://www.kdd.org/kdd2016/papers/files/rfp0289-zhaiA.pdf)
+
+This paper uses the two tower architecture to model the relevance of a query and an ad. Additionally, the self-attention mechanism is used to better learn the representation of the query/ad vector. This is a direct application of self-attention on the relevance problem.
+
+<img align="center" src="imgs/kdd-2016-1.png">
+
+<img align="center" src="imgs/kdd-2016-2.png">
+
 
 
 ### <a id="ijcai2017">[DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](https://www.ijcai.org/Proceedings/2017/0239.pdf)
