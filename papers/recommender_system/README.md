@@ -70,7 +70,10 @@ with Recurrent Neural Networks](#kdd2016) |
 | IJCAI2017-2 | Attentional FM | [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Network](#ijcai2017-2) | 
 | KDD2018 | Adaptive user interest with local activation | [Deep Interest Network for Click-Through Rate Prediction](#kdd2018) |
 | KDD2018 | Knowledge distillation | [Ranking Distillation: Learning Compact Ranking Models With High Performance for Recommender System](#kdd2018-2) |
-| AAAI2019 | Latent and evoluted user interest | [Deep Interest Evolution Network for Click-Through Rate Prediction](#aaai2019) | 
+| AAAI2019 | Latent and evolved user interest | [Deep Interest Evolution Network for Click-Through Rate Prediction](#aaai2019) | 
+| IJCAI2019 | Session-based recommendation | [Deep Session Interest Network for Click-Through Rate Prediction](#ijcai2019) |
+| WWW2019 | CNN-based feature generation | [Feature Generation by Convolutional Neural Network for
+Click-Through Rate Prediction](#www2019) |
 
 
 ### <a id="recsys2010">[The YouTube Video Recommendation System](https://www.researchgate.net/profile/Sujoy_Gupta2/publication/221140967_The_YouTube_video_recommendation_system/links/53e834410cf21cc29fdc35d2/The-YouTube-video-recommendation-system.pdf)
@@ -207,4 +210,21 @@ Proposed the Deep Interest Evolution Network (DIEN) to learn the latent user int
 
 <p align="center">
     <img src="imgs/iaaa2019.png">
+</p>
+
+### <a id="ijcai2019"> [Deep Session Interest Network for Click-Through Rate Prediction](https://www.ijcai.org/Proceedings/2019/0319.pdf)
+
+This paper proposed Deep Session Interest Network (DSIN) that learns the user within a session (behavior with timestamp within 30 min) with multi-head self-attention, then a bi-LSTM is used to model how user interests evolved overtime among sessions. Finally, a self activation unit (essentially an another attention layer) is leveraged to adaptively learn the influence of various session interests on the target item.
+
+<p align="center">
+    <img src="imgs/ijcai-2019-1.png">
+</p>
+
+[### <a id="www2019"> [Feature Generation by Convolutional Neural Network for
+Click-Through Rate Prediction](https://arxiv.org/pdf/1904.04447.pdf)
+
+This paper proposed a component in recommendation model that leverages CNN to generate the new features based on the raw features. The feature generation component consists of convolution layer, max pooling layer, and recombination layer. The advantage of this component is that it is orthogonal to the deep classifier and can be combined with any of the state-of-the-art recommendation architecture to boost the performance. 
+
+<p align="center">
+    <img src="imgs/ijcai-2019-1.png">
 </p>
