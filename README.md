@@ -1,5 +1,8 @@
 ### Changelog
 
+2020/08/12
+* Add model profiling.
+
 2020/08/02
 * Use batch first and use pad_sequence.
 * Enable model checkpoint save and load.

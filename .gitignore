@@ -1,3 +1,4 @@
+*.json
 nohup.out
 .ipynb_checkpoints/
 *.model
