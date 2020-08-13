@@ -18,6 +18,7 @@ In the early years, the typical approach for candidate generation is through heu
 | RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
 | CIKM2019 | Sequential deep matching | [SDM: Sequential Deep Matching Model for Online Large-scale Recommender System](#cikm2019) |
 | CIKM2019 | Multi-interest modeling | [Multi-Interest Network with Dynamic Routing for Recommendation at Tmall](#cikm2019-2) |
+| KDD2020  | Embedding-based | [Embedding-based Retrieval in Facebook Search](#kdd2020) |
 
 ### <a id="recsys2016">[Deep Neural Networks for YouTube Recommendations](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf)
 
@@ -50,6 +51,25 @@ Each item in both of the short term sequence and the long term sequences are rep
 ### <a id="cikm2019-2">[Multi-Interest Network with Dynamic Routing for Recommendation at Tmall](https://arxiv.org/pdf/1904.08030.pdf)
 
 
+
+### <a id="kdd2020>[Embedding-based Retrieval in Facebook Search](https://arxiv.org/pdf/2006.11632v2.pdf)
+
+This paper holistically introduces the architecture of the embedding-based retrieval of Facebook search. 
+
+** Modeling **
+The system represent both the query and the document as the embedding and leveraged a two-tower model to measure the cosine similarity of the two embeddings. For both the query and the document, richer information than just the texts are considered, such as the social embedding features and location features.
+
+** Training data **
+All the clicks are considered as the positives (all the impressions as well) and the randomly sampled document are considered as negatives. The reason that not use non-click impressions as negatives is because those data only provide the hard negatives and the model fails to know the representative distributions of all the documents.
+
+
+** Metric and loss function **
+Recall@k is leveraged to quantify the quality of retrieval and the full index scan based on KNN is used to provide the ground truth.
+
+The triplet loss is leveraged to quantify the quality of the retrieval, i.e. $Loss=\sum_i^N max(0, D(d, q+) - D(d, q-) + m)$.
+
+** Serving **
+The embeddings are indexed by faiss. The product quantization is leveraged to compress the embeddings and the compressed embeddings are stored along with the main index of the documents.
 
 
 
@@ -223,7 +243,7 @@ This paper proposed Deep Session Interest Network (DSIN) that learns the user wi
 [### <a id="www2019"> [Feature Generation by Convolutional Neural Network for
 Click-Through Rate Prediction](https://arxiv.org/pdf/1904.04447.pdf)
 
-This paper proposed a component in recommendation model that leverages CNN to generate the new features based on the raw features. The feature generation component consists of convolution layer, max pooling layer, and recombination layer. The advantage of this component is that it is orthogonal to the deep classifier and can be combined with any of the state-of-the-art recommendation architecture to boost the performance. 
+This paper proposed a component in recommendation model (FGCNN) that leverages CNN to generate the new features based on the raw features. The feature generation component consists of convolution layer, max pooling layer, and recombination layer. The advantage of this component is that it is orthogonal to the deep classifier and can be combined with any of the state-of-the-art recommendation architecture to boost the performance. 
 
 <p align="center">
     <img src="imgs/ijcai-2019-1.png">

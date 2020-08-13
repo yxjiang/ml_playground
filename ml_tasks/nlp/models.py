@@ -94,3 +94,26 @@ class RNN(nn.Module):
         x = self.fc2(x)
         x = x.view(batch, -1)
         return x
+
+
+class PositionEncoding(nn.Module):
+    def __init__(self, dim_model, dropout=0.1, max_len=5000):
+        super(PositionEncoding, self).__init__()
+        self.dropout = nn.Dropout(p=dropout)
+        pe = torch.zeros(max_len, dim_model)
+        positions = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)  # (max_len, 1)
+
+        multiplier = (torch.arange(0, dim_model, 2).float() / dim_model) * -torch.log(10000.0)
+        pe[:, 0::2] = torch.sin(position * multiplier)
+        pe[:, 1::2] = torch.cos(position * multiplier)
+        pe.unsqueeze(0).transpose(0, 1)  # (max_len, 1, dim_model)
+        self.register_buffer('pe', pe)
+
+    def forward(self, x):
+        x = x + self.pe[:x.size(0), :]
+        return self.dropout(x)
+
+
+class Transformer:
+    def __init__(self):
+        super(Transformer, self).__init__()
