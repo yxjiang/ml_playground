@@ -1,5 +1,8 @@
 ### Changelog
 
+2020/08/14
+* Add model dynamic quantization.
+
 2020/08/12
 * Add model profiling.
 
