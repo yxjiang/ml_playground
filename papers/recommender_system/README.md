@@ -50,6 +50,17 @@ Each item in both of the short term sequence and the long term sequences are rep
 
 ### <a id="cikm2019-2">[Multi-Interest Network with Dynamic Routing for Recommendation at Tmall](https://arxiv.org/pdf/1904.08030.pdf)
 
+This paper proposes multi-interest network that is able to represent user's interests into multiple user representation vectors. The benefit of using multiple embedding vector is that it naturally model user's multiple interests at the same time without forcing mix those interests into one embedding.
+
+The input features of the users including the user demographic features as well as the past user interacted items (item_id, brand_id, category_id). The introducing of the brand_id and category_id can help mitigate the cold-start issue once new products are onboarded. Each of the features are represented as one-hot encoding and then transfered to embedding through embedding layer. For each feature group, a pooling layer is used to reduce the dimension of the concatenated embeddings and then feed to the multi-interest extraction layer to generate the user embedding vectors.
+
+For model training, a label-aware attention layer is used to get the weights of each user embedding vector respect to the target item, through an attention mechanism.
+
+For online serving, the label-aware attention is removed and the generated user interest vectors are used to query the items from the approximate NN services.
+
+<p align="center">
+    <img src="img/cikm2019-2.png">
+</p>
 
 
 ### <a id="kdd2020>[Embedding-based Retrieval in Facebook Search](https://arxiv.org/pdf/2006.11632v2.pdf)

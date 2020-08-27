@@ -96,24 +96,72 @@ class RNN(nn.Module):
         return x
 
 
+############################
+#  Transformer components  #
+############################
+
+class Embeddings(nn.Module):
+    def __init__(self, vocab, d_model=512):
+        self.embed = nn.Embedding(vocab, d_model)
+        self.d_model = d_model
+
+    def forward(self, x):
+        return self.embed(x) * math.sqrt(self.d_model)
+
+
 class PositionEncoding(nn.Module):
-    def __init__(self, dim_model, dropout=0.1, max_len=5000):
+    def __init__(self, d_model=512, dropout=0.1, max_len=5000):
         super(PositionEncoding, self).__init__()
         self.dropout = nn.Dropout(p=dropout)
-        pe = torch.zeros(max_len, dim_model)
-        positions = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)  # (max_len, 1)
 
-        multiplier = (torch.arange(0, dim_model, 2).float() / dim_model) * -torch.log(10000.0)
-        pe[:, 0::2] = torch.sin(position * multiplier)
-        pe[:, 1::2] = torch.cos(position * multiplier)
-        pe.unsqueeze(0).transpose(0, 1)  # (max_len, 1, dim_model)
-        self.register_buffer('pe', pe)
+        pe = torch.zeros(max_len, d_model)
+        pos = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)  # (max_len, 1): [[0], [1], ..., [4999]]
+
+        multiplier = torch.exp(torch.arange(0, d_model, 2) / d_model * -math.log(10000))
+        pe[:, 0::2] = torch.sin(pos * multiplier)
+        pe[:, 1::2] = torch.cos(pos * multiplier)
+        pe.unsqueeze(0)  # (1, max_len, d_model)
+        self.register_buffer('pe', pe)  # register non-learnable parameter
 
     def forward(self, x):
         x = x + self.pe[:x.size(0), :]
         return self.dropout(x)
 
 
+def clones(module, N):
+    """Produce N identical layers."""
+    return nn.ModuleList([copy.deepcopy(module) for _ in range(N)])
+
+
+class Encoder(nn.Module):
+    """A stack of N encode layers."""
+    def __init__(self, layer, N):
+        super(Encoder, self).__init__()
+        self.layers = clones(layer, N)
+        self.norm = LayerNorm(layer.size)
+
+    def forward(self, x, mask):
+        for layer in self.layers:
+            x = layer(x, mask)
+        return self.norm(x)
+
+class EncoderLayer(nn.Module):
+    """A layer of encoder consists of self attention, pointwise feed forward, and dropout."""
+    def __init__(self, d_model, self_attention, feed_forward, dropout):
+        super(EncoderLayer, self).__init__()
+        self.d_model = d_model
+        self.self_attention = self_attention
+        self.feed_forward = feed_forward
+        self.sublayer = clones(SublayerConnection(d_model, dropout), 2)
+
+    def forward(self, x, mask):
+        x = self.sublayer[0](x, lambda x: self.self_attention(x, x, x, mask))
+        return self.sublayer[1](x, self.feed_forward)
+
+
+
+
 class Transformer:
     def __init__(self):
         super(Transformer, self).__init__()
+
