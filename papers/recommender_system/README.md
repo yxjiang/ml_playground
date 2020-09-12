@@ -82,7 +82,7 @@ Recall@k is leveraged to quantify the quality of retrieval and the full index sc
 
 The triplet loss is leveraged to quantify the quality of the retrieval, i.e. $Loss=\sum_i^N max(0, D(d, q+) - D(d, q-) + m)$.
 
-** Serving **
+**Serving**
 The embeddings are indexed by faiss. The product quantization is leveraged to compress the embeddings and the compressed embeddings are stored along with the main index of the documents.
 
 
