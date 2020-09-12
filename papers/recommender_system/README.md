@@ -63,7 +63,7 @@ For online serving, the label-aware attention is removed and the generated user 
 </p>
 
 
-### <a id="kdd2020>[Embedding-based Retrieval in Facebook Search](https://arxiv.org/pdf/2006.11632v2.pdf)
+### <a id="kdd2020">[Embedding-based Retrieval in Facebook Search](https://arxiv.org/pdf/2006.11632v2.pdf)
 
 This paper holistically introduces the architecture of the embedding-based retrieval of Facebook search. 
 
