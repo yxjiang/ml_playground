@@ -7,7 +7,7 @@ Survey: [Deep Learning based Recommender System: A Survey and New Perspectives (
 </p>
 
 
-## Candidate Generation
+## Matching (Candidate Generation)
 
 The general idea of candidate generation is to pre-filter candidates from a huge number (millions to billions) to an acceptable number (<1000) so that the later ranking stage is able to handle the data volume during online serving. 
 
@@ -15,10 +15,25 @@ In the early years, the typical approach for candidate generation is through heu
 
 |  Year | Category  | Title  |  
 |---|---|---|
+| CIKM2013 | DNN | [Learning Deep Structured Semantic Models for Web Search using Clickthrough Data](#cikm2013) |
 | RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
 | CIKM2019 | Sequential deep matching | [SDM: Sequential Deep Matching Model for Online Large-scale Recommender System](#cikm2019) |
 | CIKM2019 | Multi-interest modeling | [Multi-Interest Network with Dynamic Routing for Recommendation at Tmall](#cikm2019-2) |
 | KDD2020  | Embedding-based | [Embedding-based Retrieval in Facebook Search](#kdd2020) |
+
+### <a id="cikm2013">[Learning Deep Structured Semantic Models for Web Search using Clickthrough Data](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/cikm2013_DSSM_fullversion.pdf)
+
+This paper is an early work that leverages two tower structure to solve the item retrieval/matching problem. The multi-hot encoding of the query Q and the document D are each feed to a MLP to learn their representations. Then the cosine similarity between the query and the document are used to quantify their relevance.
+
+One important technique introduced in this paper is "word hashing". For a given piece of text, the mutlihot encoding is based on the letter-level trigram instead of the words. The advantage is that the dimension of the encoding vector can be significantly reduced and out-of-vocabulary issues can be mitigated.
+
+An extra benefit of this solution is that each of the towers in the model can be used separately. For example, the document tower can be used to generate the document embeddings and the embeddings can be indexed by the similarity search service for matching.
+
+<p align="center">
+    <img src="imgs/cikm2013.png">
+</p>
+
+
 
 ### <a id="recsys2016">[Deep Neural Networks for YouTube Recommendations](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf)
 
