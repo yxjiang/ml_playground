@@ -67,14 +67,17 @@ For online serving, the label-aware attention is removed and the generated user 
 
 This paper holistically introduces the architecture of the embedding-based retrieval of Facebook search. 
 
-** Modeling **
+**Modeling**
+
 The system represent both the query and the document as the embedding and leveraged a two-tower model to measure the cosine similarity of the two embeddings. For both the query and the document, richer information than just the texts are considered, such as the social embedding features and location features.
 
-** Training data **
+**Training data**
+
 All the clicks are considered as the positives (all the impressions as well) and the randomly sampled document are considered as negatives. The reason that not use non-click impressions as negatives is because those data only provide the hard negatives and the model fails to know the representative distributions of all the documents.
 
 
-** Metric and loss function **
+**Metric and loss function**
+
 Recall@k is leveraged to quantify the quality of retrieval and the full index scan based on KNN is used to provide the ground truth.
 
 The triplet loss is leveraged to quantify the quality of the retrieval, i.e. $Loss=\sum_i^N max(0, D(d, q+) - D(d, q-) + m)$.
