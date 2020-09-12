@@ -59,7 +59,7 @@ For model training, a label-aware attention layer is used to get the weights of 
 For online serving, the label-aware attention is removed and the generated user interest vectors are used to query the items from the approximate NN services.
 
 <p align="center">
-    <img src="img/cikm2019-2.png">
+    <img src="imgs/cikm2019-2.png">
 </p>
 
 
