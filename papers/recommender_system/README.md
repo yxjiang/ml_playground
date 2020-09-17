@@ -269,11 +269,10 @@ This paper proposed Deep Session Interest Network (DSIN) that learns the user wi
     <img src="imgs/ijcai-2019-1.png">
 </p>
 
-[### <a id="www2019"> [Feature Generation by Convolutional Neural Network for
-Click-Through Rate Prediction](https://arxiv.org/pdf/1904.04447.pdf)
+### <a id="www2019"> [Feature Generation by Convolutional Neural Network for Click-Through Rate Prediction](https://arxiv.org/pdf/1904.04447.pdf)
 
 This paper proposed a component in recommendation model (FGCNN) that leverages CNN to generate the new features based on the raw features. The feature generation component consists of convolution layer, max pooling layer, and recombination layer. The advantage of this component is that it is orthogonal to the deep classifier and can be combined with any of the state-of-the-art recommendation architecture to boost the performance. 
 
 <p align="center">
-    <img src="imgs/ijcai-2019-1.png">
+    <img src="imgs/www-2019-1.png">
 </p>
