@@ -10,9 +10,14 @@ System overview:
 
 |  Year | Category  | Title  |  
 |---|---|---|
-| WWW2017 | system | [Related Pins at Pinterest:The Evolution of a Real-World Recommender System](https://labs.pinterest.com/user/themes/pin_labs/assets/paper/p2p-www17.pdf) |
+| WWW2017 | system | [Related Pins at Pinterest:The Evolution of a Real-World Recommender System](#www2017) |
 | RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
 
+### <a id="www2017">[Related Pins at Pinterest:The Evolution of a Real-World Recommender System](https://labs.pinterest.com/user/themes/pin_labs/assets/paper/p2p-www17.pdf)
+
+<p align="center">
+    <img src="imgs/www2017-1.png">
+</p>
 
 
 ## Matching (Candidate Generation)
