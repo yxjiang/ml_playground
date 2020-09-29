@@ -6,6 +6,14 @@ Survey: [Deep Learning based Recommender System: A Survey and New Perspectives (
     <img src="imgs/acmsurvey-1.png">
 </p>
 
+System overview:
+
+|  Year | Category  | Title  |  
+|---|---|---|
+| WWW2017 | system | [Related Pins at Pinterest:The Evolution of a Real-World Recommender System](https://labs.pinterest.com/user/themes/pin_labs/assets/paper/p2p-www17.pdf) |
+| RecSys2016 | DNN | [Deep Neural Networks for YouTube Recommendations](#recsys2016) |
+
+
 
 ## Matching (Candidate Generation)
 
