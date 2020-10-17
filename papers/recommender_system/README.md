@@ -134,8 +134,8 @@ with Recurrent Neural Networks](#kdd2016) |
 | KDD2018 | Knowledge distillation | [Ranking Distillation: Learning Compact Ranking Models With High Performance for Recommender System](#kdd2018-2) |
 | AAAI2019 | Latent and evolved user interest | [Deep Interest Evolution Network for Click-Through Rate Prediction](#aaai2019) | 
 | IJCAI2019 | Session-based recommendation | [Deep Session Interest Network for Click-Through Rate Prediction](#ijcai2019) |
-| WWW2019 | CNN-based feature generation | [Feature Generation by Convolutional Neural Network for
-Click-Through Rate Prediction](#www2019) |
+| WWW2019 | CNN-based feature generation | [Feature Generation by Convolutional Neural Network for Click-Through Rate Prediction](#www2019) |
+| RecSys2019 | Multitask learning | [Recommending What Video to Watch Next: A Multitask Ranking System](#recsys2019) |
 
 
 ### <a id="recsys2010">[The YouTube Video Recommendation System](https://www.researchgate.net/profile/Sujoy_Gupta2/publication/221140967_The_YouTube_video_recommendation_system/links/53e834410cf21cc29fdc35d2/The-YouTube-video-recommendation-system.pdf)
@@ -289,3 +289,5 @@ This paper proposed a component in recommendation model (FGCNN) that leverages C
 <p align="center">
     <img src="imgs/www-2019-1.png">
 </p>
+
+### <a id="recsys2019"> [Recommending What Video to Watch Next: A Multitask Ranking System](https://daiwk.github.io/assets/youtube-multitask.pdf)
