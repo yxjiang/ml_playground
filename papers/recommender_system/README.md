@@ -124,8 +124,7 @@ The embeddings are indexed by faiss. The product quantization is leveraged to co
 | CIKM2015  | CNN  | [A Convolutional Click Prediction Model](#cikm2015)  |
 | ECIR2016  | FM Neural Nets  | [Deep Learning over Multi-field Categorical Data: A Case Study on User Response Prediction](#ecir2016)  | 
 | ICDM2016  | Product-based NN | [Product-based neural networks for user response prediction](#icdm2016)  |
-| KDD2016 | Attention-based matching | [DeepIntent: Learning Attentions for Online Advertising
-with Recurrent Neural Networks](#kdd2016) |
+| KDD2016 | Attention-based matching | [DeepIntent: Learning Attentions for Online Advertising with Recurrent Neural Networks](#kdd2016) |
 | DLRS2016  | Wide & Deep  | [Wide & Deep Learning for Recommender Systems](#dlrs2016) |
 | IJCAI2017 | DeepFM  | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](#ijcai2017) |
 | ADKDD2017 | Deep&Cross NN | [Deep & Cross Network for Ad Click Predictions](#adkdd2017) |
