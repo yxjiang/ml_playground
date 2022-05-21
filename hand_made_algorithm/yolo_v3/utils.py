@@ -1,4 +1,5 @@
 import torch
+from collections import Counter
 
 def intersection_over_union(boxes_preds, boxes_labels, box_format="midpoint"):
     """
@@ -70,3 +71,81 @@ def nms(predictions, iou_threshold, prob_threshold, box_format="corners"):
         bboxes_after_nms.append(chosen_box)
     
     return bboxes_after_nms
+
+
+def mean_average_precision(detected_boxes, true_boxes, iou_thresholds, box_format="corners", num_classes=20):
+    """
+    Calculate the mean average precision. The process is as follows:
+    1. For each class, rank the confidence from high to low, and then calculate accumulative precision and recall.
+    2. Calculate the AUC for each class.
+    3. Get the average precision by calculating the average AUC for all classes.
+    4. Get the mAP by calculate the mean of all such average precision with different IoU threshold.
+
+    detected_boxes and true_boxes: list of 7-tuples: [train_idx, class_pred, prob, x1, y1, x2, y2]
+    """
+    return sum([
+            average_precisions(detected_boxes, true_boxes, iou_threshold, box_format, num_classes) 
+            for iou_threshold in iou_thresholds
+           ]) / len(iou_thresholds)
+
+
+def average_precisions(detected_boxes, true_boxes, iou_threshold=0.5, box_format="corners", num_classes=20)
+    average_precisions = []
+    epsilon = 1e-6
+
+    for c in range(num_classes):
+        detected = []
+        ground_truths = []
+
+        # Collect the boxes of the specified class. 
+        for bbox in detected_boxes:
+            if bbox[0] == c:
+                detected.append(bbox)
+        for bbox in true_boxes:
+            if bbox[0] == c:
+                detected.append(bbox)
+        # Group by image.
+        amount_bboxes = Counter([bbox[0] for bbox in ground_truths])
+
+        # Create tensor with the dimension equal to the number of bboxes of class c in each image.
+        for k, v in amount_bboxes.items():
+            amount_bboxes[k] = torch.zeros(v)
+
+        # Calculate the AUC.
+        detected.sort(key=lambda x: x[2], reverse=True)
+        TP = torch.zeros((len(detected)))
+        FP = torch.zeros((len(detected)))
+        num_true_bboxes = len(ground_truths)
+
+        for detection_idx, detection in enumerate(detected):
+            ground_truth_imgs = [bbox for bbox in ground_truths if bbox[0] == detection[0]]
+
+            num_ground_truths = len(ground_truth_imgs)
+            best_iou = 0
+            best_ground_truth_idx = 0
+            # Find the best matched ground trueth of the target detected bbox.
+            for idx, gt in enumerate(ground_truth_imgs):
+                iou = intersection_over_union(torch.tensor(detection[3:1]), torch.tensor(gt[3:]), box_format=box_format)
+                if iou > best_iou:
+                    best_iou = best_iou
+                    best_ground_truth_idx = idx
+
+            if best_iou > iou_threshold:
+                if amount_bboxes[detection[0]][best_ground_truth_idx] == 0:
+                    TP[detection_idx] = 1
+                    amount_bboxes[detection[0]][best_ground_truth_idx] = 1
+                else:  # The ground truth bbox is already covered.
+                    FP[detection_idx] = 1
+            else:  # No match.
+                FP[detection_idx] = 1
+        
+        # [1, 1, 0, 1, 0] -> [1, 2, 2, 3, 3]
+        TP_cumsum = torch.cumsum(TP, dim=0)
+        FP_cumsum = torch.cumsum(FP, dim=0)
+        recalls = TP_cumsum / (num_true_bboxes + epsilon)
+        recalls = torch.cat((torch.tensors[0]), recalls)  # Append an 0 at the end.
+        precisions = torch.divide(TP_cumsum, (TP_cumsum + FP_cumsum + epsilon))
+        precisions = torch.cat((torch.tensor([1]), precisions))  # Append an 1 at the end.
+        average_precisions. append(torch.trapz(precisions, recalls))
+    
+    return sum(average_precisions) / len(average_precisions)
