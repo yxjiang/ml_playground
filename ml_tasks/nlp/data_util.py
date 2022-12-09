@@ -36,12 +36,50 @@ def download_data(url, dest_dir="/tmp/data"):
         if file_format == 'zip':
             with zipfile.ZipFile.open(filepath, "r") as z:
                 print("Start to extract [%s] to [%s]..." % (filepath, dest_dir))
-                z.extractall(path=dest_dir)
+                def is_within_directory(directory, target):
+                    
+                    abs_directory = os.path.abspath(directory)
+                    abs_target = os.path.abspath(target)
+                
+                    prefix = os.path.commonprefix([abs_directory, abs_target])
+                    
+                    return prefix == abs_directory
+                
+                def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+                
+                    for member in tar.getmembers():
+                        member_path = os.path.join(path, member.name)
+                        if not is_within_directory(path, member_path):
+                            raise Exception("Attempted Path Traversal in Tar File")
+                
+                    tar.extractall(path, members, numeric_owner=numeric_owner) 
+                    
+                
+                safe_extract(z, path=dest_dir)
                 print("File extracted")
         elif file_format == 'tgz' or file_format == 'tar.gz':
             with tarfile.open(filepath, "r:gz") as t:
                 print("Start to extract [%s] to [%s]..." % (filepath, dest_dir))
-                t.extractall(path=dest_dir)
+                def is_within_directory(directory, target):
+                    
+                    abs_directory = os.path.abspath(directory)
+                    abs_target = os.path.abspath(target)
+                
+                    prefix = os.path.commonprefix([abs_directory, abs_target])
+                    
+                    return prefix == abs_directory
+                
+                def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+                
+                    for member in tar.getmembers():
+                        member_path = os.path.join(path, member.name)
+                        if not is_within_directory(path, member_path):
+                            raise Exception("Attempted Path Traversal in Tar File")
+                
+                    tar.extractall(path, members, numeric_owner=numeric_owner) 
+                    
+                
+                safe_extract(t, path=dest_dir)
                 print("File extracted")
         else:
             print("Unsupported compression format for [%s]" % (filename))
