@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+import time
 import os
 import torch
 import torch.nn as nn
@@ -8,20 +9,22 @@ from typing import Tuple, List, Any, Callable
 
 # hyperparameters
 batch_size = 32
-max_iters = 10000
-eval_interval = 200
+max_iters = 500
+eval_interval = 100
 eval_iters = 200
 learning_rate = 3e-4
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+if torch.cuda.is_available():
+    device = 'cuda'
+else:
+    device = 'cpu'
+print(device)
 
 num_heads = 4
-sequence_length = 32 
+sequence_length = 512 
 
-
-
-dim_embedding = 384
+dim_embedding = 512
 num_stacks = 6
-dropout = 0.2
+dropout = 0.05
 
 
 def read_text_data(path: str) -> str:
@@ -242,7 +245,7 @@ def train_blm(model):
         # evaluate the loss on train and val sets
         if iter % eval_interval == 0:
             losses = estimate_loss(model, eval_iters, train_data, validation_data)
-            print(f"step {iter}: train loss {losses['train']: .4f}, val loss {losses['val']: .4f}")
+            print(f"[{time.time()}] step {iter}: train loss {losses['train']: .4f}, val loss {losses['val']: .4f}")
 
         # sample a batch of data
         x_batch, y_batch = get_batch(train_data)
@@ -304,8 +307,10 @@ if __name__ == '__main__':
         dropout=dropout
     )
     if os.path.exists(model_path):
-        print(f"load model from: {model_path}")
+        print(f'load model from: {model_path}')
         blm.load_state_dict(torch.load(model_path))
+    else:
+        print(f'no existing model, train from scratch')
     model = blm.to(device)
     # train model
     if should_train:
