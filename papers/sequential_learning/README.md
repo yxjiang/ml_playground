@@ -9,8 +9,9 @@ Sequential Learning Paper
 | ACL2016  | Self-attention with LSTM  | [Long Short-Term Memory-Networks for Machine Reading](#acl2016)  | 
 | ICML2017 | Positional Encoding | [Convolutional Sequence to Sequence Learning](#icml2017) |
 | NIPS2017  | Transformer with multi-head attention | [Attention Is All You Need](#nips2017)  |
+| 2018    | GPT-1 | [Improving Language Understanding by Generative Pre-Training](#llm2018) |
 | NAACL-HLT2019 | BERT | [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](#naacl2019) |
-
+| NIPS2020 | GPT-3 | [Language Models are Few-Shot Learners](#nips2020) |
 
 
 ## <a id="nips2014">[Sequence to Sequence Learning with Neural Networks](https://papers.nips.cc/paper/5346-sequence-to-sequence-learning-with-neural-networks.pdf)
@@ -76,7 +77,12 @@ Abandon recurrent NN and only use feed forward and attention mechanism for featu
 
 TBA
 
+## <a id="llm2018">[Improving Language Understanding by Generative Pre-Training](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf)
+
+TBA
 
 ## <a id="naacl2019">[BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://www.aclweb.org/anthology/N19-1423.pdf)
 
 TBA
+
+## <a id="nips2020">[Language Models are Few-Shot Learners](https://arxiv.org/pdf/2005.14165.pdf)
