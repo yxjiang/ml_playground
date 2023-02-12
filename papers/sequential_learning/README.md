@@ -9,8 +9,9 @@ Sequential Learning Paper
 | ACL2016  | Self-attention with LSTM  | [Long Short-Term Memory-Networks for Machine Reading](#acl2016)  | 
 | ICML2017 | Positional Encoding | [Convolutional Sequence to Sequence Learning](#icml2017) |
 | NIPS2017  | Transformer with multi-head attention | [Attention Is All You Need](#nips2017)  |
-| 2018    | GPT-1 | [Improving Language Understanding by Generative Pre-Training](#llm2018) |
+| 2018    | GPT-1 | [Improving Language Understanding by Generative Pre-Training](#gpt1) |
 | NAACL-HLT2019 | BERT | [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](#naacl2019) |
+| 2019 | GPT-2 | [ Language models are unsupervised multitask learners](#gpt2) |
 | NIPS2020 | GPT-3 | [Language Models are Few-Shot Learners](#nips2020) |
 
 
@@ -77,7 +78,7 @@ Abandon recurrent NN and only use feed forward and attention mechanism for featu
 
 TBA
 
-## <a id="llm2018">[Improving Language Understanding by Generative Pre-Training](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf)
+## <a id="gpt1">[Improving Language Understanding by Generative Pre-Training](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf)
 
 TBA
 
@@ -85,4 +86,10 @@ TBA
 
 TBA
 
+## <a id="gpt1">[Language Models are Unsupervised Multitask Learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf)
+
+TBA
+
 ## <a id="nips2020">[Language Models are Few-Shot Learners](https://arxiv.org/pdf/2005.14165.pdf)
+
+TBA
