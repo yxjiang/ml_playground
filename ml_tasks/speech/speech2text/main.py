@@ -16,7 +16,7 @@ def parse_argument() -> argparse.Namespace:
     batch_mode_parser = sub_parsers.add_parser('batch', help='batch mode: Speech to text for the given audio file.')
     batch_mode_parser.add_argument('-f', '--file_path', required=True, help='Path of the audio file.')
     batch_mode_parser.add_argument('-sr', '--sample_rate', default=8000, help='The sample rate of the input audio.')
-    batch_mode_parser.add_argument('-fb', '--frames_per_buffer', default=1024 * 1024,
+    batch_mode_parser.add_argument('-fb', '--frames_per_buffer', default=1024 * 1024 * 4,
         help='Determines how many frames to read at a time in the input stream. It is a trade-off between throughput and latency.')
 
     # Real time speech recognition parameters.
