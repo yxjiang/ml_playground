@@ -28,12 +28,14 @@ class Wav2VecProcessor(ASRProcessor):
         super().__init__(args=args, file_name=file_name)
         self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_BASE_960H
         self.model = self.bundle.get_model().to(device)
-        # self.decoder = GreedyCTCDecoder(labels=self.bundle.get_labels())
-        pretrained_lm_files = download_pretrained_files('librispeech-4-gram')
-        self.decoder = ctc_decoder(
-            lexicon=pretrained_lm_files.lexicon,
-            tokens=pretrained_lm_files.tokens
-        )
+        if args.decoder == 'greedy':
+            self.decoder = GreedyCTCDecoder(labels=self.bundle.get_labels())
+        elif args.decoder == 'libri':
+            pretrained_lm_files = download_pretrained_files('librispeech-4-gram')
+            self.decoder = ctc_decoder(
+                lexicon=pretrained_lm_files.lexicon,
+                tokens=pretrained_lm_files.tokens
+            )
 
     def process(self) -> str:
         """Load the audio from the file. Conduct resampling if needed. And then conduct inference and rescoring.

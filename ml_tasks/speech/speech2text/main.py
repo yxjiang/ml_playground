@@ -18,6 +18,8 @@ def parse_argument() -> argparse.Namespace:
     batch_mode_parser.add_argument('-sr', '--sample_rate', default=8000, help='The sample rate of the input audio.')
     batch_mode_parser.add_argument('-fb', '--frames_per_buffer', default=1024 * 1024 * 4,
         help='Determines how many frames to read at a time in the input stream. It is a trade-off between throughput and latency.')
+    batch_mode_parser.add_argument('-d', '--decoder', choices=['greedy', 'libri'], default='libri',
+        help='The decoder used to rescore the candidates.')
 
     # Real time speech recognition parameters.
     realtime_mode_parser = sub_parsers.add_parser('realtime', help='')
@@ -27,6 +29,8 @@ def parse_argument() -> argparse.Namespace:
     realtime_mode_parser.add_argument('-b', '--buffer_size', default=10,
         help='The number of available frames before sending to the speech to text model.')
     realtime_mode_parser.add_argument('-f', '--file_path', default='tmp_file.wav', help='Temp file to store the stream.')
+    realtime_mode_parser.add_argument('-d', '--decoder', choices=['greedy', 'libri'], default='libri',
+        help='The decoder used to rescore the candidates.')
 
     args = parser.parse_args()
     return args
