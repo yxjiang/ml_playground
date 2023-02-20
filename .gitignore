@@ -4,13 +4,23 @@ nohup.out
 *.model
 tensorboard_logs
 *.pt
+*.pth
 .data
 .vscode
 *.swp
 data/*
 */__pycache__/
+*/__pycache__/*
 */*/__pycache__/
+*/*/__pycache__/*
+*/*/*/__pycache__/
+*/*/*/__pycache__/*
 runs
 */runs/*
 */*/runs/*
+# Ignore test data.
+*/*.wav
+*.wav
+# Ignore all model directories and files.
+*/*/models/*
 
