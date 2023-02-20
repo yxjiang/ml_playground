@@ -103,13 +103,13 @@ class StreamOrchestrator(Orchestrator):
         """Process the raw_input. Predict and get the result. Then convert to text.
         """
         self._save(raw_input=raw_input)
-        self.processor.process()
-        print('Process recognized text...')
+        transcript = self.processor.process()
+        print(f'{transcript}')
 
     def _save(self, raw_input: List[bytes]):
         """Save the audio data into temp file.
         """
-        obj = wave.open(self.tmp_file_name, 'wb')
+        obj = wave.open(self.args.file_path, 'wb')
         obj.setnchannels(1)
         obj.setsampwidth(self.pyaudio.get_sample_size(paInt16))
         obj.setframerate(self.args.sample_rate)

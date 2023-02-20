@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from argparse import Namespace
 import torch
 import torchaudio
+from torchaudio.models.decoder._ctc_decoder import ctc_decoder
+from torchaudio.models.decoder import download_pretrained_files
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -26,7 +28,12 @@ class Wav2VecProcessor(ASRProcessor):
         super().__init__(args=args, file_name=file_name)
         self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_BASE_960H
         self.model = self.bundle.get_model().to(device)
-        self.decoder = GreedyCTCDecoder(labels=self.bundle.get_labels())
+        # self.decoder = GreedyCTCDecoder(labels=self.bundle.get_labels())
+        pretrained_lm_files = download_pretrained_files('librispeech-4-gram')
+        self.decoder = ctc_decoder(
+            lexicon=pretrained_lm_files.lexicon,
+            tokens=pretrained_lm_files.tokens
+        )
 
     def process(self) -> str:
         waveform, sample_rate = torchaudio.load(self.file_name)
@@ -36,7 +43,9 @@ class Wav2VecProcessor(ASRProcessor):
 
         with torch.inference_mode():
             emission, _ = self.model(waveform)
-            transcript = self.decoder(emission[0]).replace('|', ' ').lower()
+            beam_search_result = self.decoder(emission)
+            transcript = ' '.join(beam_search_result[0][0].words).strip()
+            transcript = transcript.replace('|', ' ').lower()
             return transcript
             
 
