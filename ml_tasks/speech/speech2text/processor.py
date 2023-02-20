@@ -36,6 +36,8 @@ class Wav2VecProcessor(ASRProcessor):
         )
 
     def process(self) -> str:
+        """Load the audio from the file. Conduct resampling if needed. And then conduct inference and rescoring.
+        """
         waveform, sample_rate = torchaudio.load(self.file_name)
         waveform = waveform.to(device)
         if sample_rate != self.bundle.sample_rate:

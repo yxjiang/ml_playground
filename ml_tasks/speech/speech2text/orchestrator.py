@@ -12,7 +12,6 @@ import wave
 from processor import Wav2VecProcessor
 
 
-
 class Listener(Thread):
     """The listener to handle the stream input.
     """
@@ -72,8 +71,6 @@ class BatchOrchestrator(Orchestrator):
         print(f'Transcript: {transcript}')
 
 
-
-
 class StreamOrchestrator(Orchestrator):
     """The orchestrator that process real time speech to text.
     """
@@ -114,5 +111,3 @@ class StreamOrchestrator(Orchestrator):
         obj.setsampwidth(self.pyaudio.get_sample_size(paInt16))
         obj.setframerate(self.args.sample_rate)
         obj.writeframes(b''.join(raw_input))
-
-
