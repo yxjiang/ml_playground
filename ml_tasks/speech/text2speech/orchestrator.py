@@ -1,10 +1,11 @@
 """
 The orchestrator that put all the text to speech sub-modules together.
 """
-from argparse import Namespace
 import nltk
 from nltk.tokenize import sent_tokenize
+import pyaudio
 from threading import Thread
+import wave
 
 import processor
 
@@ -12,7 +13,8 @@ import processor
 class TTSOrchestrator(Thread):
     """Tokenize the text, and then 
     """
-    def __init__(self, text: str, sample_rate: int = 8000, language: str = 'en'):
+    def __init__(self, text: str, sample_rate: int = 8000, language: str = 'en', read_mode: str = 'incremental'):
+        super().__init__()
         self.text = text
         self.sample_rate = sample_rate
         self.language = language
@@ -36,14 +38,49 @@ class TTSOrchestrator(Thread):
             raise ValueError(f'Unsupported sample rate {self.sample_rate}. Only supports 8khz and 16khz.')
         self.processor = processor.SileroTTSProcessor(language=self.language, speaker=self.voice)
         nltk.download('punkt')
+        self.pyaudio = pyaudio.PyAudio()
+        self.chunk = 1024
+        self.stream: pyaudio.Stream = None  # initialize on first wav file load.
+        self.read_mode = read_mode
 
+    def __del__(self):
+        if self.stream:
+            self.stream.close()
+        self.pyaudio.terminate()
 
     def run(self):
         """Tokenize the input text into sentences, and tts each sentence.
         """
         texts = sent_tokenize(self.text)
-        for text in texts:
-            wav_file = self.processor.process(text)
-            processor.play_wav(wav_file)
-
-
+        if self.read_mode == 'incremental':
+            for i, text in enumerate(texts):
+                filepath = f'output_tts_{i}.wav'
+                self.processor.process(text=text, filepath=filepath)
+                processor.play_wav(filepath)
+        elif self.read_mode == 'one_shot':
+            wav_files = []
+            for i, text in enumerate(texts):
+                filepath = f'output_tts_{i}.wav'
+                self.processor.process(text=text, filepath=filepath)
+                wav_files.append(filepath)
+            
+            # Preload all files and create streams.
+            data = bytearray()
+            for wav_file in wav_files:
+                wf = wave.open(wav_file, 'rb')
+                if not self.stream:
+                    self.stream = self.pyaudio.open(
+                        format = self.pyaudio.get_format_from_width(wf.getsampwidth()),
+                        channels = wf.getnchannels(),
+                        rate = wf.getframerate(),
+                        output = True,
+                    )
+                # Append all file contents to the data buffer.
+                buffer = None
+                while True:
+                    buffer = wf.readframes(self.chunk)
+                    if buffer or len(buffer):
+                        data.extend(buffer)
+                    else:
+                        break
+            self.stream.write(bytes(data))

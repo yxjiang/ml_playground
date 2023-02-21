@@ -1,6 +1,8 @@
+import os
 import pyaudio
 import torch
 import torchaudio
+from typing import List
 import wave
 
 
@@ -40,7 +42,7 @@ class SileroTTSProcessor:
             speaker=speaker,
         )
 
-    def process(self, text: str):
+    def process(self, text: str, filepath: str):
         audio = self.apply_tts(
             texts=[text],
             model=self.model,
@@ -48,7 +50,8 @@ class SileroTTSProcessor:
             symbols=self.symbols,
             device=device,
         )
-        filepath = 'output_tts.wav'
+        if os.path.exists(filepath):
+            os.remove(filepath)
         torchaudio.save(
             filepath=filepath,
             src=audio[0].unsqueeze(0),
