@@ -23,4 +23,8 @@ runs
 *.wav
 # Ignore all model directories and files.
 */*/models/*
-
+# Secrets
+secrets/*
+*/*.secrets
+*/*/*.secrets
+*/*/*/*.secrets

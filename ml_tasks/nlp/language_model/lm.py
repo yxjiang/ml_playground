@@ -182,7 +182,7 @@ class Block(nn.Module):
         return x
 
 
-class BigramLM(nn.Module):
+class LLM(nn.Module):
     
     def __init__(self, vocab_size: int, num_heads: int, sequence_length: int, dim_embedding: int, num_stacks: int, dropout: float):
         super().__init__()
