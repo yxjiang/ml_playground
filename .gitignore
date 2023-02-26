@@ -26,4 +26,5 @@ runs
 # Secrets
 secrets/*
 */*.secrets
-
+*/*/*.secrets
+*/*/*/*.secrets
