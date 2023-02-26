@@ -8,8 +8,9 @@ import time
 from threading import Thread
 from typing import List
 import wave
+import sys
 
-from processor import Wav2VecProcessor
+from processor import Wav2Vec2Processor
 
 
 class Listener(Thread):
@@ -50,7 +51,7 @@ class Orchestrator(ABC):
     """
     def __init__(self, args: Namespace):
         self.args = args
-        self.processor = Wav2VecProcessor(args=args, file_name=self.args.file_path)
+        self.processor = Wav2Vec2Processor(args=args, file_name=self.args.file_path)
 
     @abstractmethod
     def run(self):
@@ -78,30 +79,50 @@ class StreamOrchestrator(Orchestrator):
         super().__init__(args)
         self.frames = []
         self.listener = Listener(args=args, frames=self.frames)
+        self.listener.daemon = True  # Set listener as daemon so it can be killed when the program exits.
         self.pyaudio = PyAudio()
 
-    def run(self):
+    def run(self, acc_transcript: str = ''):
         """Use an infinite loop to retrieve the raw input from the audio stream.
         Process the input only when there are enough frames of data.
-        """
-        listener = Listener(args=self.args, frames=self.frames)
-        listener.start()
-        print('Start to listen...')
-        while True:
-            if len(self.frames) < self.args.buffer_size:
-                continue
-            else:
-                raw_input = self.frames.copy()
-                self.frames.clear()
-                self._process(raw_input)
-            time.sleep(0.1)
 
-    def _process(self, raw_input: List[bytes]):
+        Args:
+            acc_transcript: Used to store the accumulated transcripts. The caller can get it externally.
+        """
+        self.listener.start()
+        print('Start to listen...')
+        no_input = 0
+        try:
+            while True:
+                if len(self.frames) < self.args.buffer_size:
+                    print(f'{len(self.frames)}')
+                    continue
+                else:
+                    raw_input = self.frames.copy()
+                    self.frames.clear()
+                    transcript = self._process(raw_input)
+                    size = len(transcript)
+                    if size > 0:
+                        no_input = 0
+                        acc_transcript += ' ' + transcript
+                    else:
+                        no_input += 1
+                    # Stop if no meaningful transcript for a few times.
+                    if self.args.no_input_retry != -1 and no_input == self.args.no_input_retry:
+                        print(f'[No input for {self.args.no_input_retry} times, terminate.]')
+                        raise SystemExit
+                time.sleep(0.1)
+        finally:
+            print('ASR stopped')
+
+    def _process(self, raw_input: List[bytes]) -> str:
         """Process the raw_input. Predict and get the result. Then convert to text.
         """
         self._save(raw_input=raw_input)
         transcript = self.processor.process()
         print(f'{transcript}')
+        return transcript
+
 
     def _save(self, raw_input: List[bytes]):
         """Save the audio data into temp file.

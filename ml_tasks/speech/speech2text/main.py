@@ -28,9 +28,10 @@ def parse_argument() -> argparse.Namespace:
         help='Determines how many frames to read at a time in the input stream. It is a trade-off between throughput and latency.')
     realtime_mode_parser.add_argument('-b', '--buffer_size', default=20,
         help='The number of available frames before sending to the speech to text model.')
-    realtime_mode_parser.add_argument('-f', '--file_path', default='tmp_file.wav', help='Temp file to store the stream.')
+    realtime_mode_parser.add_argument('-f', '--file_path', default='tmp_asr_file.wav', help='Temp file to store the stream.')
     realtime_mode_parser.add_argument('-d', '--decoder', choices=['greedy', 'libri'], default='libri',
         help='The decoder used to rescore the candidates.')
+    realtime_mode_parser.add_argument('-n', '--no-input-retry', default=2)
 
     args = parser.parse_args()
     return args

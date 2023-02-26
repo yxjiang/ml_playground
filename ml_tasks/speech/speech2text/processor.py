@@ -23,7 +23,9 @@ class ASRProcessor(ABC):
         pass
     
 
-class Wav2VecProcessor(ASRProcessor):
+class Wav2Vec2Processor(ASRProcessor):
+    """Wav2Vec2: https://arxiv.org/pdf/1904.05862.pdf.
+    """
     def __init__(self, args: Namespace, file_name: str):
         super().__init__(args=args, file_name=file_name)
         self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_BASE_960H
