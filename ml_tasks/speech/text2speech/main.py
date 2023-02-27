@@ -2,8 +2,8 @@
 The entry of text to speechg.
 """
 import argparse
-import orchestrator
-import threading
+from speech.text2speech.orchestrator import TTSOrchestrator
+
 
 def parse_argument():
     parser = argparse.ArgumentParser(description="Speech to text module.")
@@ -15,7 +15,7 @@ def parse_argument():
     inference_parser.add_argument('-sr', '--sample-rate', default=16000, help='The sample rate of the input audio.')
     inference_parser.add_argument('-l', '--language', choices=['ru', 'en', 'es', 'de', 'fr'], default='en',
         help='The language of voice.')
-    inference_parser.add_argument('-r', '--read-mode', choices=['incremental', 'one_shot'], default='one_shot',
+    inference_parser.add_argument('-r', '--read-mode', choices=['incremental', 'one_shot', 'nothing'], default='one_shot',
         help='read mode: incremental is fast to response, but there are pause between chunked sentences; ' +
             'one_shot is more natural, but delay is high for long response.')
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     args = parse_argument()
     module = None
     if args.mode == 'inference':
-        module = orchestrator.TTSOrchestrator(
+        module = TTSOrchestrator(
             text=args.text, sample_rate=args.sample_rate, language=args.language, read_mode=args.read_mode)
     if module:
-        module.start()
+        module.process()

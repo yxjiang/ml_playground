@@ -3,21 +3,28 @@ The orchestrator that put all the speech to text sub-modules together.
 """
 from abc import ABC, abstractmethod
 from argparse import Namespace
+from multiprocessing import Pipe, Process
 from pyaudio import PyAudio, paInt16
 import time
 from threading import Thread
 from typing import List
+import warnings
 import wave
-import sys
 
-from processor import Wav2Vec2Processor
+from speech.speech2text.processor import Wav2Vec2Processor
+from nlp.language_model import gpt_api
+from speech.text2speech.orchestrator import TTSOrchestrator
+
+
+# Suppress torch UserWarning
+warnings.filterwarnings('ignore', category=UserWarning)
 
 
 class Listener(Thread):
     """The listener to handle the stream input.
     """
 
-    def __init__(self, args: Namespace, frames: List[bytes]):
+    def __init__(self, args: Namespace, pipe: Pipe):
         """
         Args:
             sample_rate: The sample rate of the input audio.
@@ -35,15 +42,26 @@ class Listener(Thread):
             output=True,
             frames_per_buffer=self.frames_per_buffer,
         )
-        self.frames = frames
+        self.pipe = pipe
+        self.listen_flag = True
+        print('[new listener]')
+
+    def stop(self):
+        self.listen_flag = False
 
     def run(self):
         """Listen forever.
         """
-        while True:
+        print('[start listening...]')
+        count = 0
+        while self.listen_flag:
+            count += 1
+            if count % 50 == 0:
+                print('[listenning...]')
             data = self.stream.read(self.frames_per_buffer, exception_on_overflow=False)
-            self.frames.append(data)
+            self.pipe.send(data)
             time.sleep(0.01)
+        print('[stopped]')
 
 
 class Orchestrator(ABC):
@@ -78,7 +96,8 @@ class StreamOrchestrator(Orchestrator):
     def __init__(self, args: Namespace):
         super().__init__(args)
         self.frames = []
-        self.listener = Listener(args=args, frames=self.frames)
+        self.consumer_pipe, self.producer_pipe = Pipe()
+        self.listener = Listener(args=args, pipe=self.producer_pipe)
         self.listener.daemon = True  # Set listener as daemon so it can be killed when the program exits.
         self.pyaudio = PyAudio()
 
@@ -94,8 +113,13 @@ class StreamOrchestrator(Orchestrator):
         no_input = 0
         try:
             while True:
+                try:
+                    data = self.consumer_pipe.recv()
+                    self.frames.append(data)
+                except EOFError:
+                    print('eof')
                 if len(self.frames) < self.args.buffer_size:
-                    print(f'{len(self.frames)}')
+                    # print(len(self.frames))
                     continue
                 else:
                     raw_input = self.frames.copy()
@@ -111,7 +135,107 @@ class StreamOrchestrator(Orchestrator):
                     if self.args.no_input_retry != -1 and no_input == self.args.no_input_retry:
                         print(f'[No input for {self.args.no_input_retry} times, terminate.]')
                         raise SystemExit
-                time.sleep(0.1)
+                time.sleep(0.01)
+        finally:
+            print('ASR stopped')
+
+    def _process(self, raw_input: List[bytes]) -> str:
+        """Process the raw_input. Predict and get the result. Then convert to text.
+        """
+        self._save(raw_input=raw_input)
+        transcript = self.processor.process()
+        print(f'{transcript}')
+        return transcript
+
+
+    def _save(self, raw_input: List[bytes]):
+        """Save the audio data into temp file.
+        """
+        obj = wave.open(self.args.file_path, 'wb')
+        obj.setnchannels(1)
+        obj.setsampwidth(self.pyaudio.get_sample_size(paInt16))
+        obj.setframerate(self.args.sample_rate)
+        obj.writeframes(b''.join(raw_input))
+
+
+def create_listener(args: Namespace, producer_pipe: Pipe):
+    l = Listener(args=args, pipe=producer_pipe)
+    # l.daemon = True  # Set listener as daemon so it can be killed when the program exits.
+    l.run()
+
+
+def create_answer(answer: str):
+    tts = TTSOrchestrator(text=answer, read_mode='one_shot')
+    tts.process()
+
+class ConversationOrchestrator(Orchestrator):
+    """The orchestrator that process real time voice based converstaion.
+    """
+    def __init__(self, args: Namespace):
+        super().__init__(args)
+        self.frames = []
+        self.consumer_pipe, self.producer_pipe = Pipe()
+        self.listener = Process(target=create_listener, args=(args, self.producer_pipe))
+        self.pyaudio = PyAudio()
+        self.communicator = gpt_api.OpenAICompleteCommunicator(is_conversation=True)
+
+    def run(self):
+        """Use an infinite loop to retrieve the raw input from the audio stream.
+        Process the input only when there are enough frames of data.
+
+        Args:
+            acc_transcript: Used to store the accumulated transcripts. The caller can get it externally.
+        """
+        count = 0
+        self.listener.start()
+        no_input = 0
+        acc_transcript = ''
+        try:
+            while True:
+                count += 1
+                try:
+                    data = self.consumer_pipe.recv()
+                    self.frames.append(data)
+                except EOFError:
+                    # if count % 10 == 0:
+                    #     print('eof')
+                    continue
+                if len(self.frames) < self.args.buffer_size:
+                    # Skip when there are too few frames.
+                    # if count % 10 == 0:
+                    #     print('skip')
+                    continue
+                else:
+                    raw_input = self.frames.copy()
+                    self.frames.clear()
+                    transcript = self._process(raw_input)
+                    size = len(transcript)
+                    if size > 0:
+                        no_input = 0
+                        acc_transcript += ' ' + transcript
+                    else:
+                        no_input += 1
+                    
+                    if self.args.no_input_retry != -1 and no_input == self.args.no_input_retry:
+                        no_input = 0
+                        # Answer when there is an input pause.
+                        if len(acc_transcript) > 0:
+                            # Stop the listener to prevent treat the answer voice as input.
+                            self.listener.terminate()
+                            # Conduct text understanding.
+                            copy_transcript = acc_transcript[:]
+                            acc_transcript = ''
+                            print(f'[No input for {self.args.no_input_retry} times, start to reply for {copy_transcript}.]')
+                            answer = self.communicator.send_requests(prompt=copy_transcript)
+                            # Conduct TTS.
+                            tts = TTSOrchestrator(text=answer, read_mode='incremental')
+                            tts.process()
+                            # Restart a new listener after answering.
+                            self.listener = Process(target=create_listener, args=(self.args, self.producer_pipe))
+                            self.listener.start()
+                        else:
+                            print('No input, continue wait.')
+                time.sleep(0.02)
         finally:
             print('ASR stopped')
 

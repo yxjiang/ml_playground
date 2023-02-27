@@ -1,0 +1,1 @@
+from ml_tasks import speech  # noqa

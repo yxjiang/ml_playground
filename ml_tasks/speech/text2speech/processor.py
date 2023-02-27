@@ -1,31 +1,26 @@
 import os
+import numpy as np
 import pyaudio
 import torch
-import torchaudio
 from typing import List
-import wave
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def play_wav(filepath: str):
-    """Play the wave file. Copy from the pyaudio tutorial.
-    """
-    chunk = 1024
-    wf = wave.open(filepath, 'rb')
+def play_from_data(data: torch.Tensor, frames_per_buffer: int = 1024, sample_rate: int = 8000):
     p = pyaudio.PyAudio()
-    # Open a .Stream object to write the WAV file to a stream.
     stream = p.open(
-        format = p.get_format_from_width(wf.getsampwidth()),
-        channels = wf.getnchannels(),
-        rate = wf.getframerate(),
+        format = pyaudio.paInt16,
+        channels = data.shape[0],
+        rate = sample_rate,
+        frames_per_buffer=frames_per_buffer,
         output = True,
     )
-    # Play from the wave file.
-    while len(data := wf.readframes(chunk)):
-        stream.write(data)
-    
+    # Convert data to acceptable format.
+    bytes_data = (data.numpy() * 32767).astype(np.int16).tobytes()
+    stream.write(bytes_data)
+    stream.stop_stream()
     stream.close()
     p.terminate()
 
@@ -40,9 +35,10 @@ class SileroTTSProcessor:
             model='silero_tts',
             language=language,
             speaker=speaker,
+            verbose=False,
         )
 
-    def process(self, text: str, filepath: str):
+    def process(self, text: str, filepath: str) -> torch.Tensor:
         audio = self.apply_tts(
             texts=[text],
             model=self.model,
@@ -52,10 +48,5 @@ class SileroTTSProcessor:
         )
         if os.path.exists(filepath):
             os.remove(filepath)
-        torchaudio.save(
-            filepath=filepath,
-            src=audio[0].unsqueeze(0),
-            sample_rate=self.sample_rate,
-            bits_per_sample=16,
-        )
-        return filepath
+        data = audio[0].unsqueeze(0)  # (channel, samples)
+        return data
