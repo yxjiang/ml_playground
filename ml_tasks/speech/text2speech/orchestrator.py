@@ -64,17 +64,6 @@ class TTSOrchestrator(Thread):
                 if os.path.exists(filepath):
                     os.remove(filepath)
                 data = self.processor.process(text=text, filepath=filepath)
-                # # Wait for tmp wav file to be created.
-                # while not os.path.exists(filepath):
-                #     print(f'wave file [{filepath}] not available')
-                #     time.sleep(0.02)
-                # # Wait for tmp wav file to be stable.
-                # file_size = 0
-                # while (new_file_size := os.path.getsize(filepath)) != file_size:
-                #     print(f'wave file [{filepath}] not ready {file_size} -> {new_file_size}')
-                #     file_size = new_file_size
-                #     time.sleep(0.02)
-                # time.sleep(1)
                 play_from_data(data)
         elif self.read_mode == 'one_shot':
             data_list = []
@@ -88,39 +77,8 @@ class TTSOrchestrator(Thread):
 
             data = cat(data_list, dim=1)
             play_from_data(data)
-            
-            # # Preload all files and create streams.
-            # data = bytearray()
-            # for i, wav_file in enumerate(wav_files):
-            #     # Wait for tmp wav file to be created.
-            #     while not os.path.exists(wav_file):
-            #         print(f'wave file [{wav_file}] not available')
-            #         time.sleep(0.02)
-            #     # Wait for tmp wav file to be stable.
-            #     file_size = 0
-            #     while (new_file_size := os.path.getsize(wav_file)) != file_size:
-            #         print(f'wave file [{wav_file}] not ready {file_size} -> {new_file_size}')
-            #         file_size = new_file_size
-            #         time.sleep(0.02)
-            #     wf = wave.open(wav_file, 'rb')
-            #     if not self.stream:
-            #         self.stream = self.pyaudio.open(
-            #             format = self.pyaudio.get_format_from_width(wf.getsampwidth()),
-            #             channels = wf.getnchannels(),
-            #             rate = wf.getframerate(),
-            #             output = True,
-            #         )
-            #     # Append all file contents to the data buffer.
-            #     buffer = None
-            #     while True:
-            #         buffer = wf.readframes(self.chunk)
-            #         if buffer and len(buffer):
-            #             data.extend(buffer)
-            #         else:
-            #             break
-            # # self.stream.write(bytes(data))
         else:
-            pass
+            raise ValueError(f'Read mode: {self.read_mode} not supported.')
         self.stop()
 
     def run(self):
