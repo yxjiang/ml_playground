@@ -23,11 +23,21 @@ class OpenAICommunicator(ABC):
 
 class OpenAICompleteCommunicator(OpenAICommunicator):
 
-    def __init__(self, is_conversation: bool = False, max_token: int = 50, temperature: float = 0.5):
+    def __init__(self, is_conversation: bool = False, max_token: int = 100, temperature: float = 0.5, model_type: str = 'text-ada-001'):
         super().__init__()
         self.is_conversation = is_conversation
         self.max_token = max_token
         self.temperature = temperature
+        available_models = [
+            'text-ada-001',      # $0.0004 / 1K tokens
+            'text-babbage-001',  # $0.0005 / 1K tokens
+            'text-curie-001',    # $0.002 / 1K tokens
+            'text-davinci-003'   # $0.02 / 1K tokens
+        ]
+        if model_type not in available_models:
+            raise ValueError(f'Only accept models in {available_models}')
+        self.model_type = model_type
+
     
     def send_requests(self, prompt: str) -> str:
         headers = {
@@ -36,7 +46,7 @@ class OpenAICompleteCommunicator(OpenAICommunicator):
         }
         prompt
         data = {
-            'model': 'text-babbage-001',
+            'model': self.model_type,
             'prompt': prompt,
             'max_tokens': self.max_token,
         }
@@ -46,6 +56,7 @@ class OpenAICompleteCommunicator(OpenAICommunicator):
         json = response.json()
         answer = json['choices'][0]['text']
         print(answer)
+        return answer
         
 
 if __name__ == "__main__":

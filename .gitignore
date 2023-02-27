@@ -9,12 +9,8 @@ tensorboard_logs
 .vscode
 *.swp
 data/*
-*/__pycache__/
-*/__pycache__/*
-*/*/__pycache__/
-*/*/__pycache__/*
-*/*/*/__pycache__/
-*/*/*/__pycache__/*
+**/__pycache__/
+**/__pycache__/*
 runs
 */runs/*
 */*/runs/*
@@ -24,7 +20,5 @@ runs
 # Ignore all model directories and files.
 */*/models/*
 # Secrets
-secrets/*
-*/*.secrets
-*/*/*.secrets
-*/*/*/*.secrets
+**/secrets/*
+**/*.secrets

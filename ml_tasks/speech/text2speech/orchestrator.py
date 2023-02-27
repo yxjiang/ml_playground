@@ -3,11 +3,14 @@ The orchestrator that put all the text to speech sub-modules together.
 """
 import nltk
 from nltk.tokenize import sent_tokenize
+import os
 import pyaudio
+from datetime import datetime
+from torch import cat
 from threading import Thread
-import wave
 
-import processor
+
+from speech.text2speech.processor import SileroTTSProcessor, play_from_data
 
 
 class TTSOrchestrator(Thread):
@@ -36,51 +39,47 @@ class TTSOrchestrator(Thread):
             self.voice += '_16khz'
         else:
             raise ValueError(f'Unsupported sample rate {self.sample_rate}. Only supports 8khz and 16khz.')
-        self.processor = processor.SileroTTSProcessor(language=self.language, speaker=self.voice)
-        nltk.download('punkt')
+        self.processor = SileroTTSProcessor(language=self.language, speaker=self.voice)
+        # nltk.download('punkt')
         self.pyaudio = pyaudio.PyAudio()
         self.chunk = 1024
         self.stream: pyaudio.Stream = None  # initialize on first wav file load.
         self.read_mode = read_mode
+        self.tmp_tts_folder = './tmp_tts_folder'
+        if not os.path.exists(self.tmp_tts_folder):
+            os.makedirs(self.tmp_tts_folder)
 
-    def __del__(self):
+    def stop(self):
         if self.stream:
             self.stream.close()
         self.pyaudio.terminate()
 
-    def run(self):
+    def process(self):
         """Tokenize the input text into sentences, and tts each sentence.
         """
         texts = sent_tokenize(self.text)
         if self.read_mode == 'incremental':
             for i, text in enumerate(texts):
-                filepath = f'output_tts_{i}.wav'
-                self.processor.process(text=text, filepath=filepath)
-                processor.play_wav(filepath)
+                filepath = os.path.join(self.tmp_tts_folder, f'output_tts_{datetime.now()}.wav')
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+                data = self.processor.process(text=text, filepath=filepath)
+                play_from_data(data)
         elif self.read_mode == 'one_shot':
+            data_list = []
             wav_files = []
-            for i, text in enumerate(texts):
-                filepath = f'output_tts_{i}.wav'
-                self.processor.process(text=text, filepath=filepath)
+            for text in texts:
+                filepath = os.path.join(self.tmp_tts_folder, f'output_tts_{datetime.now()}.wav')
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+                data_list.append(self.processor.process(text=text, filepath=filepath))
                 wav_files.append(filepath)
-            
-            # Preload all files and create streams.
-            data = bytearray()
-            for wav_file in wav_files:
-                wf = wave.open(wav_file, 'rb')
-                if not self.stream:
-                    self.stream = self.pyaudio.open(
-                        format = self.pyaudio.get_format_from_width(wf.getsampwidth()),
-                        channels = wf.getnchannels(),
-                        rate = wf.getframerate(),
-                        output = True,
-                    )
-                # Append all file contents to the data buffer.
-                buffer = None
-                while True:
-                    buffer = wf.readframes(self.chunk)
-                    if buffer or len(buffer):
-                        data.extend(buffer)
-                    else:
-                        break
-            self.stream.write(bytes(data))
+
+            data = cat(data_list, dim=1)
+            play_from_data(data)
+        else:
+            raise ValueError(f'Read mode: {self.read_mode} not supported.')
+        self.stop()
+
+    def run(self):
+        self.process()

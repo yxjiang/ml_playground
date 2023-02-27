@@ -31,7 +31,7 @@ def parse_argument() -> argparse.Namespace:
     realtime_mode_parser.add_argument('-f', '--file_path', default='tmp_asr_file.wav', help='Temp file to store the stream.')
     realtime_mode_parser.add_argument('-d', '--decoder', choices=['greedy', 'libri'], default='libri',
         help='The decoder used to rescore the candidates.')
-    realtime_mode_parser.add_argument('-n', '--no-input-retry', default=2)
+    realtime_mode_parser.add_argument('-n', '--no-input-retry', default=1)
 
     args = parser.parse_args()
     return args
@@ -43,6 +43,6 @@ if __name__ == '__main__':
     if args.mode == 'batch':
         module = orchestrator.BatchOrchestrator(args=args)
     elif args.mode == 'realtime':
-        module = orchestrator.StreamOrchestrator(args=args)
+        module = orchestrator.ConversationOrchestrator(args=args)
     if module:
         module.run()
