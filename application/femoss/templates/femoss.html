@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Femoss: conversation with non human being</title>
+        <style>
+            div.scroll {
+                margin-top: 5%;
+                margin-left: 10%;
+                margin-right: 10%;
+                padding: 4px;
+                background-color: rgb(185, 190, 202);
+                width: 80%;
+                height: 500px;
+                overflow-x: hidden;
+                overflow-y: auto;
+                text-align: justify;
+            }
+            moss {
+                display: block;
+                padding: 4px;
+                margin-left: auto;
+                margin-right: auto;
+                width: 60%;
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.socket.io/4.6.1/socket.io.js"></script>
+        <script type="text/javascript">
+            function updateScroll() {
+                var dialog_div = $('#conversation')[0]
+                dialog_div.scrollTop = dialog_div.scrollHeight
+            }
+
+            var socket = io.connect('http://127.0.0.1:2222')
+            socket.on('update_page', function(data) {
+                var logo_url = ''
+                if (data['initiator'] == 'human') {
+                    logo_url = '/static/human.png'
+                } else {
+                    logo_url = '/static/femoss.png'
+                }
+                var new_child = $('<div>' + '<img style="width:100px;height:100px" src="' + logo_url + '"/>' + data['text'] + '</div>')
+                $('#conversation').append(new_child)
+                updateScroll()
+            })
+        </script>
+        <style>
+            body {
+                background-image: url("/static/static_moss.png");
+                background-size: cover;
+                background-repeat: no-repeat;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div></div>
+        <div id="femoss" class="moss">
+            <img src="/static/femoss.png" class="moss">
+        </div>
+        <div id="conversation" class="scroll">
+        </div>
+    </body>
+</html>
