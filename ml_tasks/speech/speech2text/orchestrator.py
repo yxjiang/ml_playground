@@ -160,13 +160,13 @@ class StreamOrchestrator(Orchestrator):
 
 def create_listener(args: Namespace, producer_pipe: Pipe):
     l = Listener(args=args, pipe=producer_pipe)
-    # l.daemon = True  # Set listener as daemon so it can be killed when the program exits.
     l.run()
 
 
 def create_answer(answer: str):
     tts = TTSOrchestrator(text=answer, read_mode='one_shot')
     tts.process()
+
 
 class ConversationOrchestrator(Orchestrator):
     """The orchestrator that process real time voice based converstaion.
