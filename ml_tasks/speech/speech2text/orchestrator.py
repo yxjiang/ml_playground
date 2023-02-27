@@ -3,8 +3,10 @@ The orchestrator that put all the speech to text sub-modules together.
 """
 from abc import ABC, abstractmethod
 from argparse import Namespace
+import json
 from multiprocessing import Pipe, Process
 from pyaudio import PyAudio, paInt16
+import requests
 import time
 from threading import Thread
 from typing import List
@@ -44,7 +46,6 @@ class Listener(Thread):
         )
         self.pipe = pipe
         self.listen_flag = True
-        print('[new listener]')
 
     def stop(self):
         self.listen_flag = False
@@ -52,12 +53,12 @@ class Listener(Thread):
     def run(self):
         """Listen forever.
         """
-        print('[start listening...]')
+        print('[Start listening...]')
         count = 0
         while self.listen_flag:
             count += 1
             if count % 50 == 0:
-                print('[listenning...]')
+                print('[Still listening...]')
             data = self.stream.read(self.frames_per_buffer, exception_on_overflow=False)
             self.pipe.send(data)
             time.sleep(0.01)
@@ -177,7 +178,7 @@ class ConversationOrchestrator(Orchestrator):
         self.consumer_pipe, self.producer_pipe = Pipe()
         self.listener = Process(target=create_listener, args=(args, self.producer_pipe))
         self.pyaudio = PyAudio()
-        self.communicator = gpt_api.OpenAICompleteCommunicator(is_conversation=True)
+        self.communicator = gpt_api.OpenAICompleteCommunicator(is_conversation=True, model_type=self.args.model_type)
 
     def run(self):
         """Use an infinite loop to retrieve the raw input from the audio stream.
@@ -222,11 +223,15 @@ class ConversationOrchestrator(Orchestrator):
                         if len(acc_transcript) > 0:
                             # Stop the listener to prevent treat the answer voice as input.
                             self.listener.terminate()
-                            # Conduct text understanding.
+                            # Conduct NUL.
                             copy_transcript = acc_transcript[:]
                             acc_transcript = ''
                             print(f'[No input for {self.args.no_input_retry} times, start to reply for {copy_transcript}.]')
+                            self._update_frontend(initiator='human', text=copy_transcript)  # Send http request to update the question.
+
                             answer = self.communicator.send_requests(prompt=copy_transcript)
+                            self._update_frontend(initiator='ai', text=answer)  # Send http request to update the answer.
+
                             # Conduct TTS.
                             tts = TTSOrchestrator(text=answer, read_mode='incremental')
                             tts.process()
@@ -247,7 +252,6 @@ class ConversationOrchestrator(Orchestrator):
         print(f'{transcript}')
         return transcript
 
-
     def _save(self, raw_input: List[bytes]):
         """Save the audio data into temp file.
         """
@@ -256,3 +260,10 @@ class ConversationOrchestrator(Orchestrator):
         obj.setsampwidth(self.pyaudio.get_sample_size(paInt16))
         obj.setframerate(self.args.sample_rate)
         obj.writeframes(b''.join(raw_input))
+
+    def _update_frontend(self, initiator: str, text: str):
+        headers = {'Content-type': 'application/json'}
+        request_data = {'initiator': initiator, 'text': text}
+        response = requests.post('http://127.0.0.1:2222/update', data=json.dumps(request_data), headers=headers)
+        if response.status_code != 200:
+            print(f'Error: {response.status_code}')

@@ -32,6 +32,7 @@ def parse_argument() -> argparse.Namespace:
     realtime_mode_parser.add_argument('-d', '--decoder', choices=['greedy', 'libri'], default='libri',
         help='The decoder used to rescore the candidates.')
     realtime_mode_parser.add_argument('-n', '--no-input-retry', default=1)
+    realtime_mode_parser.add_argument('-m', '--model-type', default='text-ada-001', help='The type of conversation model.')
 
     args = parser.parse_args()
     return args
