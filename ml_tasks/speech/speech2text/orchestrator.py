@@ -178,7 +178,7 @@ class ConversationOrchestrator(Orchestrator):
         self.consumer_pipe, self.producer_pipe = Pipe()
         self.listener = Process(target=create_listener, args=(args, self.producer_pipe))
         self.pyaudio = PyAudio()
-        self.communicator = gpt_api.OpenAICompleteCommunicator(is_conversation=True, model_type=self.args.model_type)
+        self.communicator = gpt_api.OpenAIChatCommunicator(model_type=self.args.model_type)
 
     def run(self):
         """Use an infinite loop to retrieve the raw input from the audio stream.
@@ -198,13 +198,8 @@ class ConversationOrchestrator(Orchestrator):
                     data = self.consumer_pipe.recv()
                     self.frames.append(data)
                 except EOFError:
-                    # if count % 10 == 0:
-                    #     print('eof')
                     continue
                 if len(self.frames) < self.args.buffer_size:
-                    # Skip when there are too few frames.
-                    # if count % 10 == 0:
-                    #     print('skip')
                     continue
                 else:
                     raw_input = self.frames.copy()
