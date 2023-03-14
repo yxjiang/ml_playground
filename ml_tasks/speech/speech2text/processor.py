@@ -21,7 +21,8 @@ class ASRProcessor(ABC):
     @abstractmethod
     def process(self):
         pass
-    
+
+# Write a class that uses Silero STT model to do the speech to text processing. The method should name as 'process' and the constructor should accept the file_name of the audio.
 
 class Wav2Vec2Processor(ASRProcessor):
     """Wav2Vec2: https://arxiv.org/pdf/1904.05862.pdf.

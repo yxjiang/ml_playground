@@ -60,7 +60,7 @@ class OpenAICompleteCommunicator(OpenAICommunicator):
         
 
 class OpenAIChatCommunicator(OpenAICommunicator):
-    def __init__(self, max_token: int = 100, temperature: float = 0.5, model_type: str = 'gpt-3.5-turbo'):
+    def __init__(self, max_token: int = 30, temperature: float = 0.5, model_type: str = 'gpt-3.5-turbo'):
         super().__init__()
         self.max_token = max_token
         self.temperature = temperature
